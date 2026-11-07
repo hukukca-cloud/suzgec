@@ -1,0 +1,24 @@
+{
+  "name": "suzgec",
+  "version": "1.0.0",
+  "description": "PDF, Word ve UDF belgeleri için çevrimdışı, açık kaynak kişisel veri temizleme aracı",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js",
+    "test": "node test/core.test.js"
+  },
+  "keywords": [
+    "kvkk",
+    "anonimleştirme",
+    "kişisel veri",
+    "udf",
+    "uyap",
+    "redaction"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "pdfjs-dist": "^3.11.174"
+  },
+  "private": true
+}
