@@ -138,4 +138,6 @@ Ad sözlüğünün genişletilmesi, yeni bağlam kalıpları, yanlış pozitif �
 
 ## Lisans
 
-Süzgeç [MIT Lisansı](LICENSE) ile yayımlanmaktadır. Gömülü üçüncü taraf kütüphanelerin lisansları için [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) dosyasına bakınız.
+Süzgeç'in tüm ticari kullanım hakları **IsThisLegal**'e (@isthis_legal) aittir. Kaynak kodu, [PolyForm Noncommercial 1.0.0](LICENSE) lisansı kapsamında ticari olmayan amaçlarla (bireysel kullanım, araştırma, eğitim, kâr amacı gütmeyen kuruluşlar) ücretsiz olarak kullanılabilir. Ticari amaçla kullanım, yeniden dağıtım, satış veya başka bir ürüne dahil etme için IsThisLegal'den yazılı izin alınması gerekir.
+
+1.1.0 sürümünden önce MIT Lisansı ile yayımlanmış kopyalar, o lisansın koşullarına tabi olmaya devam eder. Gömülü üçüncü taraf kütüphanelerin lisansları için [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) dosyasına bakınız.

@@ -656,6 +656,26 @@
     $('#ag-rozet').title = csp ? csp.getAttribute('content') : '';
     ciz();
   }
+
+  /* ---------- Künye Kontrol bağlantısı ----------
+   * Süzgeç bir sayfanın içine gömüldüğünde, yalnız o üst sayfa temizlenmiş metni isteyebilir.
+   * Ağ bağlantısı kullanılmaz; ileti tarayıcı içinde kalır. */
+  function temizMetin(d) {
+    var m = mod(), metin = d.belge.metin, parca = [], konum = 0;
+    d.bulgular.slice().sort(function (a, b) { return a.start - b.start; }).forEach(function (b) {
+      if (b.start < konum || !b.secili) return;
+      parca.push(metin.slice(konum, b.start), C.yerineKonacak(b, m));
+      konum = b.end;
+    });
+    parca.push(metin.slice(konum));
+    return parca.join('').replace(/\n{3,}/g, '\n\n').trim();
+  }
+  window.addEventListener('message', function (e) {
+    if (window.parent === window || e.source !== window.parent) return;
+    if (!e.data || e.data.tip !== 'kk-temiz-iste') return;
+    var hazir = durum.tarandi ? durum.dosyalar.filter(function (d) { return d.belge && !d.hata; }) : [];
+    window.parent.postMessage({ tip: 'kk-temiz', metin: hazir.map(temizMetin).join('\n\n'), belge: hazir.length }, '*');
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();

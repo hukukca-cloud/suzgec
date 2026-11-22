@@ -343,7 +343,7 @@ footer strong { color: var(--beyaz); }
 <footer>
   <div class="kap">
     <div>
-      <p><strong>Süzgeç</strong> sürüm 1.0.0 · Açık kaynak (MIT). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
+      <p><strong>Süzgeç</strong> sürüm 1.1.0 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
       <p>Otomatik tespit, kişisel verilerin tamamının yakalanacağını güvence altına almaz; çıktıların paylaşılmadan önce kullanıcı tarafından kontrol edilmesi gerekmektedir. Etiketleme yöntemi ve eşleme tablosunun saklanması hâlinde elde edilen sonuç, anonim hâle getirme değil takma adlandırma niteliğinde olabilir.</p>
     </div>
     <div class="imza-kutu">
@@ -2420,6 +2420,26 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('#ag-rozet').title = csp ? csp.getAttribute('content') : '';
     ciz();
   }
+
+  /* ---------- Künye Kontrol bağlantısı ----------
+   * Süzgeç bir sayfanın içine gömüldüğünde, yalnız o üst sayfa temizlenmiş metni isteyebilir.
+   * Ağ bağlantısı kullanılmaz; ileti tarayıcı içinde kalır. */
+  function temizMetin(d) {
+    var m = mod(), metin = d.belge.metin, parca = [], konum = 0;
+    d.bulgular.slice().sort(function (a, b) { return a.start - b.start; }).forEach(function (b) {
+      if (b.start < konum || !b.secili) return;
+      parca.push(metin.slice(konum, b.start), C.yerineKonacak(b, m));
+      konum = b.end;
+    });
+    parca.push(metin.slice(konum));
+    return parca.join('').replace(/\n{3,}/g, '\n\n').trim();
+  }
+  window.addEventListener('message', function (e) {
+    if (window.parent === window || e.source !== window.parent) return;
+    if (!e.data || e.data.tip !== 'kk-temiz-iste') return;
+    var hazir = durum.tarandi ? durum.dosyalar.filter(function (d) { return d.belge && !d.hata; }) : [];
+    window.parent.postMessage({ tip: 'kk-temiz', metin: hazir.map(temizMetin).join('\n\n'), belge: hazir.length }, '*');
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();
