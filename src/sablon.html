@@ -129,7 +129,13 @@ label.dosya-dugme input:focus-visible + span { outline: 2px solid var(--kirmizi)
 .kart-ad strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kart-ad span { font-size: 12.5px; color: var(--gri); }
 .rozet { font: 700 10.5px/1 var(--sans); letter-spacing: .06em; padding: 6px 7px; border-radius: 4px; color: var(--beyaz); flex: none; background: var(--siyah); }
-.rozet-pdf { background: var(--kirmizi); } .rozet-docx { background: var(--siyah); } .rozet-udf { background: var(--beyaz); color: var(--siyah); box-shadow: inset 0 0 0 1.5px var(--siyah); } .rozet-hata { background: var(--gri); }
+.rozet-pdf { background: var(--kirmizi); } .rozet-docx { background: var(--siyah); } .rozet-udf { background: var(--beyaz); color: var(--siyah); box-shadow: inset 0 0 0 1.5px var(--siyah); } .rozet-hata { background: var(--gri); } .rozet-txt { background: var(--koyu-gri); }
+.birak-dugmeler { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+.birak-dugmeler .veya { color: var(--gri); font-size: 13px; }
+.yapistir { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 12px; padding: 14px; margin-top: 12px; }
+.yapistir label { display: block; font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--kirmizi); margin-bottom: 6px; }
+#yapistir-metin { min-height: 180px; font: 14px/1.6 var(--serif); }
+.yapistir-alt { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
 .kart-govde { padding: 12px 16px 14px; }
 .hata { color: var(--kirmizi); font-size: 13.5px; margin: 10px 16px 14px; font-weight: 600; }
 .kucuk { color: var(--gri); font-size: 13px; margin: 6px 0; }
@@ -257,7 +263,7 @@ footer strong { color: var(--beyaz); }
       </svg>
       <div>
         <h1>Süz<span>geç</span></h1>
-        <p>PDF, Word ve UDF için çevrimdışı kişisel veri temizleme</p>
+        <p>PDF, Word, UDF ve düz metin için çevrimdışı kişisel veri temizleme</p>
       </div>
     </div>
     <div class="ust-sag">
@@ -299,7 +305,7 @@ footer strong { color: var(--beyaz); }
         </fieldset>
         <fieldset>
           <legend>İndirme biçimi</legend>
-          <label class="secim"><input type="radio" name="bicim" value="ozgun" checked><span>Özgün biçimde<small>PDF → PDF, Word → Word, UDF → UDF</small></span></label>
+          <label class="secim"><input type="radio" name="bicim" value="ozgun" checked><span>Özgün biçimde<small>PDF → PDF, Word → Word, UDF → UDF, metin → .txt</small></span></label>
           <label class="secim"><input type="radio" name="bicim" value="docx"><span>Tümünü Word (.docx) olarak<small>PDF ve UDF belgeleri de düzenlenebilir Word dosyasına dönüştürülür</small></span></label>
         </fieldset>
         <fieldset>
@@ -329,9 +335,18 @@ footer strong { color: var(--beyaz); }
       <section aria-label="Belgeler">
         <div class="birak" id="birak">
           <strong>Belgeleri buraya bırakınız</strong>
-          <div class="tur-rozetleri"><span class="rozet rozet-pdf">PDF</span><span class="rozet rozet-docx">DOCX</span><span class="rozet rozet-udf">UDF</span></div>
+          <div class="tur-rozetleri"><span class="rozet rozet-pdf">PDF</span><span class="rozet rozet-docx">DOCX</span><span class="rozet rozet-udf">UDF</span><span class="rozet rozet-txt">METİN</span></div>
           <p>Birden çok dosya seçilebilir · Belgeler bu bilgisayardan dışarı çıkmaz</p>
-          <label class="dosya-dugme"><input type="file" id="dosya-sec" multiple accept=".pdf,.docx,.udf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><span class="dugme-koyu">Dosya seç</span></label>
+          <div class="birak-dugmeler">
+            <label class="dosya-dugme"><input type="file" id="dosya-sec" multiple accept=".pdf,.docx,.udf,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><span class="dugme-koyu">Dosya seç</span></label>
+            <span class="veya">ya da</span>
+            <button class="dugme-ikincil" id="yapistir-ac" type="button" aria-expanded="false" aria-controls="yapistir">Metni yapıştır</button>
+          </div>
+        </div>
+        <div class="yapistir" id="yapistir" hidden>
+          <label for="yapistir-metin">Metni buraya yapıştırın</label>
+          <textarea id="yapistir-metin" placeholder="Dilekçe, sözleşme, e-posta… Metin bu bilgisayardan dışarı çıkmaz."></textarea>
+          <div class="yapistir-alt"><button class="dugme-koyu" id="yapistir-ekle" type="button">Listeye ekle</button><button class="dugme-metin" id="yapistir-vazgec" type="button">Vazgeç</button></div>
         </div>
 
         <div class="eylemler">

@@ -10,7 +10,7 @@ Süzgeç; dilekçe, karar, sözleşme ve benzeri belgelerde yer alan kişisel ve
 
 1. [`dist/suzgec.html`](dist/suzgec.html) dosyasını indiriniz.
 2. Dosyayı güncel bir tarayıcıda (Chrome, Edge, Firefox, Safari) çift tıklayarak açınız. İsterseniz bilgisayarınızın internet bağlantısını kesebilirsiniz; araç aynı şekilde çalışır.
-3. Belgeleri sürükleyip bırakınız veya **Dosya seç** düğmesini kullanınız.
+3. Belgeleri sürükleyip bırakınız veya **Dosya seç** düğmesini kullanınız. Dosya yerine doğrudan metin de işlenebilir: **Metni yapıştır** düğmesiyle açılan alana metni yapıştırıp **Listeye ekle** deyiniz. Düz metin (.txt) dosyaları da kabul edilir; temizlenmiş metin, kartındaki **Temiz metni kopyala** düğmesiyle panoya alınabilir veya .txt olarak indirilebilir.
 4. **Tara ve incele** düğmesiyle taramayı başlatınız. Her belge için iki görünüm sunulur:
    - **Belge görünümü:** Belge metni, temizlenecek ifadeler numaralandırılmış ve kırmızı ile işaretlenmiş hâlde gösterilir. **Özgün metin / Temizlenmiş hâli** anahtarıyla belgenin temizleme sonrasındaki görünümü önceden incelenebilir. Yan paneldeki **Değişiklikler** listesi her değişikliğin numarasını, paragraf veya sayfa konumunu ve yerine konacak ifadeyi gösterir; listedeki bir öğeye tıklandığında belgede ilgili yere gidilir.
    - **Bulgu listesi:** Bulgular kategori bazında, bağlamlarıyla birlikte listelenir.

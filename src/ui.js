@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   var S = window.Suzgec, C = S.core;
-  var MODULLER = { pdf: S.pdf, docx: S.docx, udf: S.udf };
+  var MODULLER = { pdf: S.pdf, docx: S.docx, udf: S.udf, txt: S.metin };
 
   var durum = {
     dosyalar: [], sayac: 0, tarandi: false, indirildi: false,
@@ -80,9 +80,9 @@
   function turBul(ad) {
     var m = /\.([a-z0-9]+)$/i.exec(ad);
     var u = m ? m[1].toLowerCase() : '';
-    if (u === 'pdf' || u === 'docx' || u === 'udf') return u;
+    if (u === 'pdf' || u === 'docx' || u === 'udf' || u === 'txt') return u;
     if (u === 'doc') throw new Error('Eski Word (.doc) biçimi desteklenmemektedir; lütfen belgeyi .docx olarak kaydediniz.');
-    throw new Error('Desteklenmeyen dosya türü. PDF, Word (.docx) ve UDF dosyaları kabul edilmektedir.');
+    throw new Error('Desteklenmeyen dosya türü. PDF, Word (.docx), UDF ve düz metin (.txt) dosyaları kabul edilmektedir; metni doğrudan yapıştırabilirsiniz de.');
   }
 
   async function dosyalariEkle(liste) {
@@ -96,6 +96,19 @@
     durum.tarandi = false; durum.indirildi = false;
     ciz();
     if (durum.dosyalar.some(function (d) { return !d.hata; })) bildir('Dosyalar eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
+  }
+
+  var yapistirSayac = 0;
+  function metniEkle() {
+    var alan = $('#yapistir-metin'), metin = alan.value;
+    if (!metin.trim()) { bildir('Önce metni yapıştırın.', 'uyari'); alan.focus(); return; }
+    var veri = new TextEncoder().encode(metin);
+    durum.dosyalar.push({ id: ++durum.sayac, ad: 'yapistirilan_metin_' + (++yapistirSayac) + '.txt', boyut: veri.byteLength, tur: 'txt', buf: veri.buffer,
+      belge: null, bulgular: [], hata: null, elle: {}, ui: { sekme: 'belge', gorunum: 'ozgun' }, yapistirildi: true });
+    alan.value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false');
+    durum.tarandi = false; durum.indirildi = false;
+    ciz();
+    bildir('Metin listeye eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
   }
 
   /* ---------- Tarama ---------- */
@@ -210,7 +223,7 @@
 
   function kartIcerigi(kart, d) {
     var ust = el('div', { class: 'kart-ust' });
-    ust.appendChild(el('span', { class: 'rozet rozet-' + (d.tur || 'hata') }, esc((d.tur || '?').toUpperCase())));
+    ust.appendChild(el('span', { class: 'rozet rozet-' + (d.tur || 'hata') }, esc(d.tur === 'txt' ? 'METİN' : (d.tur || '?').toUpperCase())));
     ust.appendChild(el('div', { class: 'kart-ad' }, '<strong>' + esc(d.ad) + '</strong><span>' + boyutYaz(d.boyut) +
       (d.belge && d.tur === 'pdf' ? ' · ' + d.belge.sayfalar.length + ' sayfa' : '') +
       (durum.tarandi && !d.hata ? ' · ' + seciliSay(d.bulgular) + '/' + d.bulgular.length + ' ifade temizlenecek' : '') + '</span>'));
@@ -218,6 +231,15 @@
       var onz = el('button', { class: 'dugme-ikincil', type: 'button' }, 'Sayfa önizlemesi ve elle karartma');
       onz.onclick = function () { pdfOnizleme(d); };
       ust.appendChild(onz);
+    }
+    if (durum.tarandi && !d.hata && d.belge && d.tur === 'txt') {
+      var kop = el('button', { class: 'dugme-ikincil', type: 'button' }, 'Temiz metni kopyala');
+      kop.onclick = function () {
+        var t = S.metin.temizMetinUret(d.belge.metin, d.bulgular, mod());
+        var bitti = function (ok) { kop.textContent = ok ? 'Kopyalandı' : 'Kopyalanamadı'; setTimeout(function () { kop.textContent = 'Temiz metni kopyala'; }, 1800); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { bitti(true); }, function () { bitti(false); }); else bitti(false);
+      };
+      ust.appendChild(kop);
     }
     var kaldir = el('button', { class: 'dugme-metin', type: 'button', 'aria-label': d.ad + ' dosyasını listeden çıkar' }, 'Çıkar');
     kaldir.onclick = function () { if (d.belge && d.belge.pdf) d.belge.pdf.destroy(); durum.dosyalar = durum.dosyalar.filter(function (x) { return x !== d; }); ciz(); };
@@ -696,6 +718,9 @@
     $('#tara').addEventListener('click', tara);
     $('#indir').addEventListener('click', indir);
     $('#temizle').addEventListener('click', oturumuTemizle);
+    $('#yapistir-ac').addEventListener('click', function () { var p = $('#yapistir'), ac = p.hidden; p.hidden = !ac; this.setAttribute('aria-expanded', String(ac)); if (ac) $('#yapistir-metin').focus(); });
+    $('#yapistir-ekle').addEventListener('click', metniEkle);
+    $('#yapistir-vazgec').addEventListener('click', function () { $('#yapistir-metin').value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false'); });
     geriBaslat();
     $$('input[name="mod"]').forEach(function (r) { r.addEventListener('change', function () { durum.indirildi = false; ciz(); }); });
     var araZaman = null;

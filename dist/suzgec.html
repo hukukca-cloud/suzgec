@@ -129,7 +129,13 @@ label.dosya-dugme input:focus-visible + span { outline: 2px solid var(--kirmizi)
 .kart-ad strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .kart-ad span { font-size: 12.5px; color: var(--gri); }
 .rozet { font: 700 10.5px/1 var(--sans); letter-spacing: .06em; padding: 6px 7px; border-radius: 4px; color: var(--beyaz); flex: none; background: var(--siyah); }
-.rozet-pdf { background: var(--kirmizi); } .rozet-docx { background: var(--siyah); } .rozet-udf { background: var(--beyaz); color: var(--siyah); box-shadow: inset 0 0 0 1.5px var(--siyah); } .rozet-hata { background: var(--gri); }
+.rozet-pdf { background: var(--kirmizi); } .rozet-docx { background: var(--siyah); } .rozet-udf { background: var(--beyaz); color: var(--siyah); box-shadow: inset 0 0 0 1.5px var(--siyah); } .rozet-hata { background: var(--gri); } .rozet-txt { background: var(--koyu-gri); }
+.birak-dugmeler { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+.birak-dugmeler .veya { color: var(--gri); font-size: 13px; }
+.yapistir { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 12px; padding: 14px; margin-top: 12px; }
+.yapistir label { display: block; font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--kirmizi); margin-bottom: 6px; }
+#yapistir-metin { min-height: 180px; font: 14px/1.6 var(--serif); }
+.yapistir-alt { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
 .kart-govde { padding: 12px 16px 14px; }
 .hata { color: var(--kirmizi); font-size: 13.5px; margin: 10px 16px 14px; font-weight: 600; }
 .kucuk { color: var(--gri); font-size: 13px; margin: 6px 0; }
@@ -257,7 +263,7 @@ footer strong { color: var(--beyaz); }
       </svg>
       <div>
         <h1>Süz<span>geç</span></h1>
-        <p>PDF, Word ve UDF için çevrimdışı kişisel veri temizleme</p>
+        <p>PDF, Word, UDF ve düz metin için çevrimdışı kişisel veri temizleme</p>
       </div>
     </div>
     <div class="ust-sag">
@@ -299,7 +305,7 @@ footer strong { color: var(--beyaz); }
         </fieldset>
         <fieldset>
           <legend>İndirme biçimi</legend>
-          <label class="secim"><input type="radio" name="bicim" value="ozgun" checked><span>Özgün biçimde<small>PDF → PDF, Word → Word, UDF → UDF</small></span></label>
+          <label class="secim"><input type="radio" name="bicim" value="ozgun" checked><span>Özgün biçimde<small>PDF → PDF, Word → Word, UDF → UDF, metin → .txt</small></span></label>
           <label class="secim"><input type="radio" name="bicim" value="docx"><span>Tümünü Word (.docx) olarak<small>PDF ve UDF belgeleri de düzenlenebilir Word dosyasına dönüştürülür</small></span></label>
         </fieldset>
         <fieldset>
@@ -329,9 +335,18 @@ footer strong { color: var(--beyaz); }
       <section aria-label="Belgeler">
         <div class="birak" id="birak">
           <strong>Belgeleri buraya bırakınız</strong>
-          <div class="tur-rozetleri"><span class="rozet rozet-pdf">PDF</span><span class="rozet rozet-docx">DOCX</span><span class="rozet rozet-udf">UDF</span></div>
+          <div class="tur-rozetleri"><span class="rozet rozet-pdf">PDF</span><span class="rozet rozet-docx">DOCX</span><span class="rozet rozet-udf">UDF</span><span class="rozet rozet-txt">METİN</span></div>
           <p>Birden çok dosya seçilebilir · Belgeler bu bilgisayardan dışarı çıkmaz</p>
-          <label class="dosya-dugme"><input type="file" id="dosya-sec" multiple accept=".pdf,.docx,.udf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><span class="dugme-koyu">Dosya seç</span></label>
+          <div class="birak-dugmeler">
+            <label class="dosya-dugme"><input type="file" id="dosya-sec" multiple accept=".pdf,.docx,.udf,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><span class="dugme-koyu">Dosya seç</span></label>
+            <span class="veya">ya da</span>
+            <button class="dugme-ikincil" id="yapistir-ac" type="button" aria-expanded="false" aria-controls="yapistir">Metni yapıştır</button>
+          </div>
+        </div>
+        <div class="yapistir" id="yapistir" hidden>
+          <label for="yapistir-metin">Metni buraya yapıştırın</label>
+          <textarea id="yapistir-metin" placeholder="Dilekçe, sözleşme, e-posta… Metin bu bilgisayardan dışarı çıkmaz."></textarea>
+          <div class="yapistir-alt"><button class="dugme-koyu" id="yapistir-ekle" type="button">Listeye ekle</button><button class="dugme-metin" id="yapistir-vazgec" type="button">Vazgeç</button></div>
         </div>
 
         <div class="eylemler">
@@ -1814,6 +1829,52 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 })(typeof self !== 'undefined' ? self : this);
 
 </script>
+<!-- Süzgeç: düz metin işleyici -->
+<script>
+/*
+ * Süzgeç — Düz metin işleyici
+ * Yapıştırılan metinler ve .txt dosyaları için. Metin olduğu gibi okunur; temizlenmiş hâli
+ * UTF-8 (BOM'lu) düz metin olarak yazılır.
+ */
+(function (root) {
+  'use strict';
+
+  function coz(arrayBuffer) {
+    var bayt = new Uint8Array(arrayBuffer);
+    try { return new TextDecoder('utf-8', { fatal: true }).decode(bayt); }
+    catch (e) {
+      // UTF-8 değilse Türkçe Windows kodlamasıyla dene
+      try { return new TextDecoder('windows-1254').decode(bayt); } catch (e2) { return new TextDecoder('utf-8').decode(bayt); }
+    }
+  }
+
+  async function oku(arrayBuffer) {
+    var metin = coz(arrayBuffer).replace(/^﻿/, '').replace(/\r\n?/g, '\n');
+    var uyarilar = [];
+    if (!metin.trim()) uyarilar.push('Metin boş görünüyor.');
+    return { metin: metin, uyarilar: uyarilar };
+  }
+
+  function temizMetinUret(metin, bulgular, mod) {
+    var C = root.Suzgec.core, parca = [], konum = 0;
+    bulgular.slice().sort(function (a, b) { return a.start - b.start; }).forEach(function (b) {
+      if (!b.secili || b.start < konum) return;
+      parca.push(metin.slice(konum, b.start), C.yerineKonacak(b, mod));
+      konum = b.end;
+    });
+    parca.push(metin.slice(konum));
+    return parca.join('');
+  }
+
+  async function yaz(belge, bulgular, mod) {
+    return new TextEncoder().encode('﻿' + temizMetinUret(belge.metin, bulgular, mod));
+  }
+
+  root.Suzgec = root.Suzgec || {};
+  root.Suzgec.metin = { oku: oku, yaz: yaz, temizMetinUret: temizMetinUret, uzanti: 'txt', mime: 'text/plain;charset=utf-8' };
+})(typeof self !== 'undefined' ? self : this);
+
+</script>
 <!-- Süzgeç: geri yerleştirme -->
 <script>
 /*!
@@ -1993,7 +2054,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 (function () {
   'use strict';
   var S = window.Suzgec, C = S.core;
-  var MODULLER = { pdf: S.pdf, docx: S.docx, udf: S.udf };
+  var MODULLER = { pdf: S.pdf, docx: S.docx, udf: S.udf, txt: S.metin };
 
   var durum = {
     dosyalar: [], sayac: 0, tarandi: false, indirildi: false,
@@ -2069,9 +2130,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function turBul(ad) {
     var m = /\.([a-z0-9]+)$/i.exec(ad);
     var u = m ? m[1].toLowerCase() : '';
-    if (u === 'pdf' || u === 'docx' || u === 'udf') return u;
+    if (u === 'pdf' || u === 'docx' || u === 'udf' || u === 'txt') return u;
     if (u === 'doc') throw new Error('Eski Word (.doc) biçimi desteklenmemektedir; lütfen belgeyi .docx olarak kaydediniz.');
-    throw new Error('Desteklenmeyen dosya türü. PDF, Word (.docx) ve UDF dosyaları kabul edilmektedir.');
+    throw new Error('Desteklenmeyen dosya türü. PDF, Word (.docx), UDF ve düz metin (.txt) dosyaları kabul edilmektedir; metni doğrudan yapıştırabilirsiniz de.');
   }
 
   async function dosyalariEkle(liste) {
@@ -2085,6 +2146,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     durum.tarandi = false; durum.indirildi = false;
     ciz();
     if (durum.dosyalar.some(function (d) { return !d.hata; })) bildir('Dosyalar eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
+  }
+
+  var yapistirSayac = 0;
+  function metniEkle() {
+    var alan = $('#yapistir-metin'), metin = alan.value;
+    if (!metin.trim()) { bildir('Önce metni yapıştırın.', 'uyari'); alan.focus(); return; }
+    var veri = new TextEncoder().encode(metin);
+    durum.dosyalar.push({ id: ++durum.sayac, ad: 'yapistirilan_metin_' + (++yapistirSayac) + '.txt', boyut: veri.byteLength, tur: 'txt', buf: veri.buffer,
+      belge: null, bulgular: [], hata: null, elle: {}, ui: { sekme: 'belge', gorunum: 'ozgun' }, yapistirildi: true });
+    alan.value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false');
+    durum.tarandi = false; durum.indirildi = false;
+    ciz();
+    bildir('Metin listeye eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
   }
 
   /* ---------- Tarama ---------- */
@@ -2199,7 +2273,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   function kartIcerigi(kart, d) {
     var ust = el('div', { class: 'kart-ust' });
-    ust.appendChild(el('span', { class: 'rozet rozet-' + (d.tur || 'hata') }, esc((d.tur || '?').toUpperCase())));
+    ust.appendChild(el('span', { class: 'rozet rozet-' + (d.tur || 'hata') }, esc(d.tur === 'txt' ? 'METİN' : (d.tur || '?').toUpperCase())));
     ust.appendChild(el('div', { class: 'kart-ad' }, '<strong>' + esc(d.ad) + '</strong><span>' + boyutYaz(d.boyut) +
       (d.belge && d.tur === 'pdf' ? ' · ' + d.belge.sayfalar.length + ' sayfa' : '') +
       (durum.tarandi && !d.hata ? ' · ' + seciliSay(d.bulgular) + '/' + d.bulgular.length + ' ifade temizlenecek' : '') + '</span>'));
@@ -2207,6 +2281,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       var onz = el('button', { class: 'dugme-ikincil', type: 'button' }, 'Sayfa önizlemesi ve elle karartma');
       onz.onclick = function () { pdfOnizleme(d); };
       ust.appendChild(onz);
+    }
+    if (durum.tarandi && !d.hata && d.belge && d.tur === 'txt') {
+      var kop = el('button', { class: 'dugme-ikincil', type: 'button' }, 'Temiz metni kopyala');
+      kop.onclick = function () {
+        var t = S.metin.temizMetinUret(d.belge.metin, d.bulgular, mod());
+        var bitti = function (ok) { kop.textContent = ok ? 'Kopyalandı' : 'Kopyalanamadı'; setTimeout(function () { kop.textContent = 'Temiz metni kopyala'; }, 1800); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { bitti(true); }, function () { bitti(false); }); else bitti(false);
+      };
+      ust.appendChild(kop);
     }
     var kaldir = el('button', { class: 'dugme-metin', type: 'button', 'aria-label': d.ad + ' dosyasını listeden çıkar' }, 'Çıkar');
     kaldir.onclick = function () { if (d.belge && d.belge.pdf) d.belge.pdf.destroy(); durum.dosyalar = durum.dosyalar.filter(function (x) { return x !== d; }); ciz(); };
@@ -2685,6 +2768,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('#tara').addEventListener('click', tara);
     $('#indir').addEventListener('click', indir);
     $('#temizle').addEventListener('click', oturumuTemizle);
+    $('#yapistir-ac').addEventListener('click', function () { var p = $('#yapistir'), ac = p.hidden; p.hidden = !ac; this.setAttribute('aria-expanded', String(ac)); if (ac) $('#yapistir-metin').focus(); });
+    $('#yapistir-ekle').addEventListener('click', metniEkle);
+    $('#yapistir-vazgec').addEventListener('click', function () { $('#yapistir-metin').value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false'); });
     geriBaslat();
     $$('input[name="mod"]').forEach(function (r) { r.addEventListener('change', function () { durum.indirildi = false; ciz(); }); });
     var araZaman = null;
