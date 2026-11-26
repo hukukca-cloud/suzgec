@@ -216,6 +216,30 @@ dialog::backdrop { background: rgba(8,8,10,.7); }
 footer { background: var(--siyah); color: #b9b9c0; font-size: 12.5px; border-top: 3px solid var(--kirmizi); }
 footer .kap { padding-top: 24px; padding-bottom: 28px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
 @media (max-width: 760px) { footer .kap { grid-template-columns: 1fr; } }
+/* ---------- Geri yerleştir ---------- */
+.ust-link { color: var(--beyaz); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--kirmizi); padding-bottom: 1px; white-space: nowrap; }
+.ust-link:hover { color: #ff4d67; }
+section.geri { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 10px; box-shadow: var(--golge); padding: 20px; margin: 4px 0 36px; scroll-margin-top: 16px; }
+.geri-ust { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 14px; }
+.geri-ust h2 { font: 700 22px/1.2 var(--serif); margin: 0; }
+.geri-ust h2 span { display: inline-block; background: var(--siyah); color: var(--beyaz); font: 700 11px/1 var(--sans); border-radius: 999px; padding: 4px 8px; margin-left: 8px; vertical-align: 3px; }
+.geri-ust p { margin: 0; color: var(--gri); font-size: 13.5px; flex: 1 1 380px; }
+.geri-izgara { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; }
+.geri-izgara > div > label.baslik { display: block; font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--kirmizi); margin-bottom: 6px; }
+#geri-metin { min-height: 170px; font: 14px/1.6 var(--serif); }
+.birak.kucuk { padding: 18px 14px; min-height: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; }
+#geri-csv-durum { font-size: 13px; color: var(--gri); word-break: break-all; }
+#geri-csv-durum.tamam { color: var(--basari); font-weight: 600; }
+.geri .satir { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+.geri-sonuc { border: 1px solid var(--acik-gri); border-radius: 8px; background: #fcfcfd; padding: 16px; font: 15px/1.8 var(--serif); white-space: pre-wrap; max-height: 460px; overflow: auto; }
+.geri-sonuc mark { color: inherit; border-radius: 3px; padding: 0 2px; }
+.geri-sonuc mark.g { background: #e3f4ea; border-bottom: 2px solid var(--basari); }
+.geri-sonuc mark.y { background: #fbf0d9; border-bottom: 2px solid var(--uyari); }
+.geri-sonuc mark.r { background: var(--kirmizi-acik); border-bottom: 2px solid var(--kirmizi); }
+.geri-aciklama { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--gri); margin: 10px 0 0; }
+.geri-aciklama i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+@media (max-width: 760px) { .geri-izgara { grid-template-columns: 1fr; } }
+
 footer p { margin: 4px 0; max-width: 760px; }
 footer strong { color: var(--beyaz); }
 .imza-kutu { border: 1px solid #2c2c32; border-radius: 12px; padding: 14px 18px; background: var(--siyah-2); }
@@ -238,6 +262,7 @@ footer strong { color: var(--beyaz); }
     </div>
     <div class="ust-sag">
       <span class="rozet-ag" id="ag-rozet">Ağ erişimi kapalı · Tamamen yerel</span>
+      <a class="ust-link" href="#geri">Geri yerleştir ↓</a>
       <a class="imza" href="https://x.com/isthis_legal" target="_blank" rel="noopener noreferrer" title="IsThisLegal hesabını X'te aç"><span class="foto"><svg viewBox="0 0 24 24" width="58%" height="58%" aria-hidden="true"><path fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 3v17M7 20h10M5 7h14M12 5.5l0 0M5 7l-3 6a3 3 0 0 0 6 0L5 7zm14 0-3 6a3 3 0 0 0 6 0l-3-6z"/></svg></span><span class="ad"><strong>IsThisLegal<svg class="onay" viewBox="0 0 24 24" aria-label="doğrulanmış"><path fill="currentColor" d="M22.5 12.5c0-1.58-.88-2.95-2.18-3.65.15-.44.23-.91.23-1.4 0-2.21-1.71-4-3.82-4-.47 0-.92.08-1.34.25C14.81 2.48 13.5 1.5 12 1.5s-2.8.98-3.38 2.19c-.42-.17-.88-.25-1.34-.25-2.11 0-3.82 1.79-3.82 4 0 .49.08.96.22 1.4C2.38 9.55 1.5 10.92 1.5 12.5c0 1.5.8 2.8 1.97 3.53-.03.21-.04.43-.04.64 0 2.21 1.71 4 3.82 4 .47 0 .92-.08 1.34-.25.58 1.21 1.88 2.08 3.41 2.08s2.83-.87 3.41-2.08c.42.17.87.25 1.34.25 2.11 0 3.82-1.79 3.82-4 0-.21-.01-.43-.04-.64 1.17-.73 1.97-2.03 1.97-3.53z"/><path fill="#fff" d="M10.54 16.2 6.8 12.46l1.41-1.41 2.33 2.33 5.26-5.26 1.41 1.41z"/></svg></strong><small>@isthis_legal</small></span></a>
     </div>
   </div>
@@ -326,6 +351,35 @@ footer strong { color: var(--beyaz); }
         <div id="dosya-listesi"></div>
       </section>
     </div>
+
+    <section class="geri" id="geri" aria-labelledby="geri-baslik">
+      <div class="geri-ust">
+        <h2 id="geri-baslik">Geri yerleştir<span>Yeni</span></h2>
+        <p>Yapay zekanın etiketli cevabını, temizleme sırasında indirdiğiniz eşleme tablosuyla gerçek adlara ve bilgilere geri çevirin. 'ye, 'nin gibi hâl ekleri yeni kelimeye göre düzeltilir.</p>
+      </div>
+      <div class="geri-izgara">
+        <div>
+          <label class="baslik" for="geri-metin">1. Etiketli metin</label>
+          <textarea id="geri-metin" placeholder="Örn. [KİŞİ-1]'nin talebi üzerine [KİŞİ-2]'ye ihtarname gönderilmiştir."></textarea>
+        </div>
+        <div>
+          <label class="baslik" for="geri-csv">2. Eşleme tablosu</label>
+          <div class="birak kucuk" id="geri-birak">
+            <label class="dosya-dugme"><input type="file" id="geri-csv" accept=".csv,text/csv"><span class="dugme-koyu">Tabloyu seç</span></label>
+            <span id="geri-csv-durum">suzgec_esleme_tablosu_GIZLI.csv dosyasını seçin ya da buraya bırakın</span>
+          </div>
+        </div>
+      </div>
+      <div class="satir">
+        <button class="dugme" id="geri-yap" type="button">Geri yerleştir</button>
+        <button class="dugme-ikincil" id="geri-kopyala" type="button" disabled>Kopyala</button>
+        <button class="dugme-ikincil" id="geri-indir" type="button" disabled>Metni indir (.txt)</button>
+        <button class="dugme-metin" id="geri-temizle" type="button">Temizle</button>
+      </div>
+      <p class="durum" id="geri-durum" role="status" aria-live="polite"></p>
+      <div class="geri-sonuc" id="geri-sonuc" hidden></div>
+      <p class="geri-aciklama" id="geri-aciklama" hidden><span><i style="background:var(--basari)"></i>Yerleştirildi</span><span><i style="background:var(--uyari)"></i>Hâl eki düzeltildi</span><span><i style="background:var(--kirmizi)"></i>Tabloda karşılığı yok</span></p>
+    </section>
   </div>
 </main>
 
@@ -343,7 +397,7 @@ footer strong { color: var(--beyaz); }
 <footer>
   <div class="kap">
     <div>
-      <p><strong>Süzgeç</strong> sürüm 1.1.0 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
+      <p><strong>Süzgeç</strong> sürüm 1.2.0 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
       <p>Otomatik tespit, kişisel verilerin tamamının yakalanacağını güvence altına almaz; çıktıların paylaşılmadan önce kullanıcı tarafından kontrol edilmesi gerekmektedir. Etiketleme yöntemi ve eşleme tablosunun saklanması hâlinde elde edilen sonuç, anonim hâle getirme değil takma adlandırma niteliğinde olabilir.</p>
     </div>
     <div class="imza-kutu">
@@ -1760,6 +1814,177 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 })(typeof self !== 'undefined' ? self : this);
 
 </script>
+<!-- Süzgeç: geri yerleştirme -->
+<script>
+/*!
+ * Süzgeç — Geri yerleştirme
+ * Tutarlı etiketleme ile temizlenen bir metne (ya da o metne dayanarak yapay zekanın ürettiği cevaba)
+ * eşleme tablosundaki özgün ifadeleri geri koyar. Türkçe hâl eklerini yeni kelimeye göre uyumlar.
+ * Ağ bağlantısı kullanmaz; her şey tarayıcının belleğinde olur.
+ */
+(function (root) {
+  'use strict';
+
+  // Süzgeç'in kullandığı etiket adları (core.js KATEGORILER ile aynı)
+  var ETIKETLER = ['KARARTMA', 'ÖZEL', 'IBAN', 'TCKN', 'E-POSTA', 'VKN', 'TELEFON', 'PLAKA', 'DOĞUM-TARİHİ', 'DOSYA-NO', 'ADRES', 'KİŞİ'];
+
+  function trKucuk(s) { return String(s).replace(/I/g, 'ı').replace(/İ/g, 'i').toLowerCase(); }
+  function sade(s) {
+    return trKucuk(s).replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ü/g, 'u')
+      .replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/̇/g, '').toUpperCase();
+  }
+  var KANONIK = Object.create(null);
+  ETIKETLER.forEach(function (e) { KANONIK[sade(e)] = e; });
+
+  // Her harf için büyük/küçük ve Türkçe karakterli/karaktersiz yazımı kabul eden desen
+  var HARF = { 'İ': '[İiIı]', 'I': '[IıİiI]', 'Ş': '[ŞşSs]', 'Ğ': '[ĞğGg]', 'Ü': '[ÜüUu]', 'Ö': '[ÖöOo]', 'Ç': '[ÇçCc]' };
+  function desenYaz(e) {
+    return e.split('').map(function (c) {
+      if (HARF[c]) return HARF[c];
+      if (c === '-') return '\\s*[-‐–]\\s*';
+      if (/[A-Z]/.test(c)) return '[' + c + c.toLowerCase() + ']';
+      return c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }).join('');
+  }
+  var ETIKET_RE_KAYNAK = '\\[\\s*(' + ETIKETLER.slice().sort(function (a, b) { return b.length - a.length; }).map(desenYaz).join('|') +
+    ')\\s*[-‐–]\\s*(\\d{1,4})\\s*\\]|(?<![\\p{L}\\d])(' + ETIKETLER.slice().sort(function (a, b) { return b.length - a.length; }).map(desenYaz).join('|') +
+    ')[-‐–](\\d{1,4})(?![\\d])';
+
+  function etiketAnahtari(ad, no) { return '[' + (KANONIK[sade(ad)] || sade(ad)) + '-' + parseInt(no, 10) + ']'; }
+
+  /* ---------- Eşleme tablosu (CSV) ---------- */
+
+  function csvSatirlari(metin) {
+    metin = String(metin).replace(/^﻿/, '');
+    var satirlar = [], satir = [], alan = '', tirnak = false, ayrac = null;
+    for (var i = 0; i < metin.length; i++) {
+      var c = metin[i];
+      if (tirnak) {
+        if (c === '"') { if (metin[i + 1] === '"') { alan += '"'; i++; } else tirnak = false; }
+        else alan += c;
+        continue;
+      }
+      if (c === '"') { tirnak = true; continue; }
+      if (ayrac === null && (c === ';' || c === ',' || c === '\t')) ayrac = c;
+      if (c === ayrac) { satir.push(alan); alan = ''; continue; }
+      if (c === '\n' || c === '\r') {
+        if (c === '\r' && metin[i + 1] === '\n') i++;
+        satir.push(alan); alan = '';
+        if (satir.some(function (x) { return x.trim(); })) satirlar.push(satir);
+        satir = [];
+        continue;
+      }
+      alan += c;
+    }
+    satir.push(alan);
+    if (satir.some(function (x) { return x.trim(); })) satirlar.push(satir);
+    return satirlar;
+  }
+
+  /** Eşleme tablosunu okur: { '[KİŞİ-1]': { ifade, kategori }, ... } */
+  function eslemeOku(metin) {
+    var harita = Object.create(null), sayi = 0;
+    csvSatirlari(metin).forEach(function (s) {
+      if (s.length < 3) return;
+      var m = /^\s*\[?\s*([^\]\-–‐]+(?:-[^\]\-–‐\d]+)*)\s*[-‐–]\s*(\d+)\s*\]?\s*$/.exec(s[0]);
+      if (!m) return;
+      var anahtar = etiketAnahtari(m[1].trim(), m[2]);
+      var ifade = s[2].replace(/\s+/g, ' ').trim();
+      if (!ifade) return;
+      // Aynı etiketin birden çok yazımı varsa en uzun olanı esas alınır (ör. ad ve soyadı birlikte)
+      if (!harita[anahtar]) { harita[anahtar] = { ifade: ifade, kategori: s[1].trim() }; sayi++; }
+      else if (ifade.length > harita[anahtar].ifade.length) harita[anahtar].ifade = ifade;
+    });
+    return { harita: harita, sayi: sayi };
+  }
+
+  /* ---------- Türkçe hâl ekleri ---------- */
+
+  var UNLU = 'aeıioöuü', KALIN = 'aıou', SERT = 'fstkçşhp';
+  var DORTLU = { a: 'ı', ı: 'ı', o: 'u', u: 'u', e: 'i', i: 'i', ö: 'ü', ü: 'ü' };
+  var EKLER = [
+    ['bulunma-ki', /^[dt][ae]ki$/], ['ayrilma', /^[dt][ae]n$/], ['bulunma', /^[dt][ae]$/],
+    ['ilgi', /^n?[ıiuü]n$/], ['vasita', /^y?l[ae]$/], ['yonelme', /^y?[ae]$/], ['belirtme', /^y?[ıiuü]$/]
+  ];
+
+  /** Kelimenin sonuna göre hâl ekini yeniden kurar. Tanınmayan ekleri olduğu gibi bırakır. */
+  function ekUyumla(kelime, ek) {
+    var k = trKucuk(String(kelime).trim());
+    if (!/[a-zçğıöşü]$/.test(k)) return ek; // rakam, kısaltma sonu vb.: ek değiştirilmez
+    var son = k.split(/\s+/).pop();
+    var unluler = son.replace(new RegExp('[^' + UNLU + ']', 'g'), '');
+    if (!unluler) return ek;
+    var v = unluler[unluler.length - 1];
+    var sonHarf = son[son.length - 1];
+    var unluyleBiter = UNLU.indexOf(sonHarf) >= 0, sert = SERT.indexOf(sonHarf) >= 0;
+    var iki = KALIN.indexOf(v) >= 0 ? 'a' : 'e', dort = DORTLU[v];
+    var kucukEk = trKucuk(ek), tur = null;
+    for (var i = 0; i < EKLER.length; i++) if (EKLER[i][1].test(kucukEk)) { tur = EKLER[i][0]; break; }
+    if (!tur) return ek;
+    var yeni;
+    switch (tur) {
+      case 'yonelme': yeni = (unluyleBiter ? 'y' : '') + iki; break;
+      case 'belirtme': yeni = (unluyleBiter ? 'y' : '') + dort; break;
+      case 'ilgi': yeni = (unluyleBiter ? 'n' : '') + dort + 'n'; break;
+      case 'bulunma': yeni = (sert ? 't' : 'd') + iki; break;
+      case 'ayrilma': yeni = (sert ? 't' : 'd') + iki + 'n'; break;
+      case 'bulunma-ki': yeni = (sert ? 't' : 'd') + iki + 'ki'; break;
+      case 'vasita': yeni = (unluyleBiter ? 'y' : '') + 'l' + iki; break;
+    }
+    // Özgün ekin büyük harf kullanımını koru
+    return ek === ek.toLocaleUpperCase('tr') && /[A-ZÇĞİÖŞÜ]/.test(ek) ? yeni.toLocaleUpperCase('tr') : yeni;
+  }
+
+  /* ---------- Geri yerleştirme ---------- */
+
+  /**
+   * Metindeki etiketleri eşleme tablosuna göre özgün ifadelerle değiştirir.
+   * Dönüş: { metin, parcalar: [{ tur: 'metin'|'yerlesti'|'bilinmeyen', ... }], sayac }
+   */
+  function geriYerlestir(metin, harita) {
+    var re = new RegExp(ETIKET_RE_KAYNAK, 'gu');
+    var parcalar = [], cikti = '', son = 0, m;
+    var sayac = { yerlesti: 0, ekDuzeltildi: 0, bilinmeyen: 0, farkliEtiket: Object.create(null) };
+    while ((m = re.exec(metin))) {
+      var bas = m.index, bitis = bas + m[0].length;
+      var ad = m[1] || m[3], no = m[2] || m[4];
+      var anahtar = etiketAnahtari(ad, no);
+      // Etiketten sonraki ek: kesme işaretli ('ye, ’nin) ya da doğrudan bitişik (ye, nin)
+      var ekM = /^(['’])?([a-zçğıöşüA-ZÇĞİÖŞÜ]{1,5})(?![a-zçğıöşüA-ZÇĞİÖŞÜ])/.exec(metin.slice(bitis));
+      var ek = null, kesme = "'";
+      if (ekM && (ekM[1] || EKLER.some(function (x) { return x[1].test(trKucuk(ekM[2])); }))) {
+        ek = ekM[2]; kesme = ekM[1] || "'"; bitis += ekM[0].length;
+      }
+      if (bas > son) { parcalar.push({ tur: 'metin', metin: metin.slice(son, bas) }); cikti += metin.slice(son, bas); }
+      var kayit = harita[anahtar];
+      if (!kayit) {
+        var ham = metin.slice(bas, bitis);
+        parcalar.push({ tur: 'bilinmeyen', metin: ham, etiket: anahtar });
+        cikti += ham; sayac.bilinmeyen++;
+      } else {
+        var yeniEk = ek ? ekUyumla(kayit.ifade, ek) : null;
+        var yeni = kayit.ifade + (ek ? kesme + yeniEk : '');
+        var ekDegisti = !!(ek && yeniEk !== ek);
+        parcalar.push({ tur: 'yerlesti', metin: yeni, etiket: anahtar, eski: metin.slice(bas, bitis), ekDegisti: ekDegisti });
+        cikti += yeni; sayac.yerlesti++;
+        if (ekDegisti) sayac.ekDuzeltildi++;
+        sayac.farkliEtiket[anahtar] = true;
+      }
+      son = bitis;
+      re.lastIndex = bitis;
+    }
+    if (son < metin.length) { parcalar.push({ tur: 'metin', metin: metin.slice(son) }); cikti += metin.slice(son); }
+    sayac.farkli = Object.keys(sayac.farkliEtiket).length;
+    delete sayac.farkliEtiket;
+    return { metin: cikti, parcalar: parcalar, sayac: sayac };
+  }
+
+  var api = { eslemeOku: eslemeOku, geriYerlestir: geriYerlestir, ekUyumla: ekUyumla, csvSatirlari: csvSatirlari };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else { root.Suzgec = root.Suzgec || {}; root.Suzgec.geri = api; }
+})(typeof self !== 'undefined' ? self : this);
+
+</script>
 <!-- Süzgeç: arayüz -->
 <script>
 /*
@@ -2382,12 +2607,72 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function oturumuTemizle() {
     durum.dosyalar.forEach(function (d) { if (d.belge && d.belge.pdf) d.belge.pdf.destroy(); });
     durum.dosyalar = []; durum.tarandi = false; durum.indirildi = false; durum.tercih = {};
+    if (S.geri && $('#geri')) geriTemizle();
     $('#dosya-sec').value = ''; $('#ara').value = ''; durum.ara = '';
     bildir('Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
     ciz();
   }
 
   /* ---------- Başlangıç ---------- */
+
+
+  /* ---------- Geri yerleştir ---------- */
+
+  var geri = { harita: null, sonuc: null };
+  function geriDurum(metin, tur) { var d = $('#geri-durum'); d.textContent = metin; d.className = 'durum' + (tur ? ' ' + tur : ''); }
+  async function geriTabloOku(dosya) {
+    if (!dosya) return;
+    var G = S.geri, metin = await dosya.text(), r = G.eslemeOku(metin);
+    if (!r.sayi) { geri.harita = null; $('#geri-csv-durum').className = ''; $('#geri-csv-durum').textContent = dosya.name; geriDurum('Bu dosyada eşleme bulunamadı. Süzgeç\'in indirdiği "eşleme tablosu" dosyasını seçin.', 'hata'); return; }
+    geri.harita = r.harita;
+    var d = $('#geri-csv-durum'); d.className = 'tamam'; d.textContent = '✓ ' + dosya.name + ' · ' + r.sayi + ' etiket';
+    geriDurum('Eşleme tablosu yüklendi. Tablo kişisel veri içerir ve yalnız bu pencerede tutulur.', '');
+  }
+  function geriYap() {
+    var metin = $('#geri-metin').value;
+    if (!metin.trim()) { geriDurum('Önce etiketli metni yapıştırın.', 'uyari'); return; }
+    if (!geri.harita) { geriDurum('Önce eşleme tablosunu yükleyin.', 'uyari'); return; }
+    var r = S.geri.geriYerlestir(metin, geri.harita); geri.sonuc = r;
+    var kutu = $('#geri-sonuc');
+    kutu.innerHTML = r.parcalar.map(function (p) {
+      if (p.tur === 'metin') return esc(p.metin);
+      if (p.tur === 'yerlesti') return '<mark class="' + (p.ekDegisti ? 'y' : 'g') + '" title="' + esc(p.eski) + '">' + esc(p.metin) + '</mark>';
+      return '<mark class="r" title="Eşleme tablosunda karşılığı yok">' + esc(p.metin) + '</mark>';
+    }).join('');
+    kutu.hidden = false; $('#geri-aciklama').hidden = false;
+    $('#geri-kopyala').disabled = $('#geri-indir').disabled = false;
+    var s = r.sayac;
+    if (!s.yerlesti && !s.bilinmeyen) { geriDurum('Metinde Süzgeç etiketi bulunamadı.', 'uyari'); return; }
+    geriDurum(s.yerlesti + ' etiket yerleştirildi' + (s.ekDuzeltildi ? ', ' + s.ekDuzeltildi + ' hâl eki düzeltildi' : '') +
+      (s.bilinmeyen ? '. ' + s.bilinmeyen + ' etiketin tabloda karşılığı yok; kırmızıyla işaretlendi, elle kontrol edin.' : '. Metni göndermeden önce okuyun.'), s.bilinmeyen ? 'uyari' : 'basari');
+  }
+  function geriTemizle() {
+    geri.harita = null; geri.sonuc = null;
+    $('#geri-metin').value = ''; $('#geri-csv').value = '';
+    var d = $('#geri-csv-durum'); d.className = ''; d.textContent = 'suzgec_esleme_tablosu_GIZLI.csv dosyasını seçin ya da buraya bırakın';
+    $('#geri-sonuc').innerHTML = ''; $('#geri-sonuc').hidden = true; $('#geri-aciklama').hidden = true;
+    $('#geri-kopyala').disabled = $('#geri-indir').disabled = true; geriDurum('', '');
+  }
+  function geriBaslat() {
+    if (!S.geri || !$('#geri')) return;
+    $('#geri-csv').addEventListener('change', function (e) { var f = e.target.files[0]; e.target.value = ''; geriTabloOku(f); });
+    var alan = $('#geri-birak');
+    ['dragenter', 'dragover'].forEach(function (t) { alan.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); alan.classList.add('aktif'); }); });
+    ['dragleave', 'drop'].forEach(function (t) { alan.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); alan.classList.remove('aktif'); }); });
+    alan.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files[0]) geriTabloOku(e.dataTransfer.files[0]); });
+    $('#geri-yap').addEventListener('click', geriYap);
+    $('#geri-temizle').addEventListener('click', geriTemizle);
+    $('#geri-kopyala').addEventListener('click', function () {
+      if (!geri.sonuc) return;
+      var b = $('#geri-kopyala');
+      var bitti = function (ok) { b.textContent = ok ? 'Kopyalandı' : 'Kopyalanamadı'; setTimeout(function () { b.textContent = 'Kopyala'; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(geri.sonuc.metin).then(function () { bitti(true); }, function () { bitti(false); });
+      else bitti(false);
+    });
+    $('#geri-indir').addEventListener('click', function () {
+      if (geri.sonuc) indirBaslat(new TextEncoder().encode('\uFEFF' + geri.sonuc.metin), 'geri_yerlestirilmis_metin.txt', 'text/plain;charset=utf-8');
+    });
+  }
 
   function baslat() {
     var alan = $('#birak');
@@ -2400,6 +2685,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('#tara').addEventListener('click', tara);
     $('#indir').addEventListener('click', indir);
     $('#temizle').addEventListener('click', oturumuTemizle);
+    geriBaslat();
     $$('input[name="mod"]').forEach(function (r) { r.addEventListener('change', function () { durum.indirildi = false; ciz(); }); });
     var araZaman = null;
     $('#ara').addEventListener('input', function (e) {

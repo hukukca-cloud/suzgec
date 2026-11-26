@@ -216,6 +216,30 @@ dialog::backdrop { background: rgba(8,8,10,.7); }
 footer { background: var(--siyah); color: #b9b9c0; font-size: 12.5px; border-top: 3px solid var(--kirmizi); }
 footer .kap { padding-top: 24px; padding-bottom: 28px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
 @media (max-width: 760px) { footer .kap { grid-template-columns: 1fr; } }
+/* ---------- Geri yerleştir ---------- */
+.ust-link { color: var(--beyaz); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--kirmizi); padding-bottom: 1px; white-space: nowrap; }
+.ust-link:hover { color: #ff4d67; }
+section.geri { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 10px; box-shadow: var(--golge); padding: 20px; margin: 4px 0 36px; scroll-margin-top: 16px; }
+.geri-ust { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 14px; }
+.geri-ust h2 { font: 700 22px/1.2 var(--serif); margin: 0; }
+.geri-ust h2 span { display: inline-block; background: var(--siyah); color: var(--beyaz); font: 700 11px/1 var(--sans); border-radius: 999px; padding: 4px 8px; margin-left: 8px; vertical-align: 3px; }
+.geri-ust p { margin: 0; color: var(--gri); font-size: 13.5px; flex: 1 1 380px; }
+.geri-izgara { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; }
+.geri-izgara > div > label.baslik { display: block; font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--kirmizi); margin-bottom: 6px; }
+#geri-metin { min-height: 170px; font: 14px/1.6 var(--serif); }
+.birak.kucuk { padding: 18px 14px; min-height: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; }
+#geri-csv-durum { font-size: 13px; color: var(--gri); word-break: break-all; }
+#geri-csv-durum.tamam { color: var(--basari); font-weight: 600; }
+.geri .satir { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+.geri-sonuc { border: 1px solid var(--acik-gri); border-radius: 8px; background: #fcfcfd; padding: 16px; font: 15px/1.8 var(--serif); white-space: pre-wrap; max-height: 460px; overflow: auto; }
+.geri-sonuc mark { color: inherit; border-radius: 3px; padding: 0 2px; }
+.geri-sonuc mark.g { background: #e3f4ea; border-bottom: 2px solid var(--basari); }
+.geri-sonuc mark.y { background: #fbf0d9; border-bottom: 2px solid var(--uyari); }
+.geri-sonuc mark.r { background: var(--kirmizi-acik); border-bottom: 2px solid var(--kirmizi); }
+.geri-aciklama { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--gri); margin: 10px 0 0; }
+.geri-aciklama i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+@media (max-width: 760px) { .geri-izgara { grid-template-columns: 1fr; } }
+
 footer p { margin: 4px 0; max-width: 760px; }
 footer strong { color: var(--beyaz); }
 .imza-kutu { border: 1px solid #2c2c32; border-radius: 12px; padding: 14px 18px; background: var(--siyah-2); }
@@ -238,6 +262,7 @@ footer strong { color: var(--beyaz); }
     </div>
     <div class="ust-sag">
       <span class="rozet-ag" id="ag-rozet">Ağ erişimi kapalı · Tamamen yerel</span>
+      <a class="ust-link" href="#geri">Geri yerleştir ↓</a>
       __IMZA_KUCUK__
     </div>
   </div>
@@ -326,6 +351,35 @@ footer strong { color: var(--beyaz); }
         <div id="dosya-listesi"></div>
       </section>
     </div>
+
+    <section class="geri" id="geri" aria-labelledby="geri-baslik">
+      <div class="geri-ust">
+        <h2 id="geri-baslik">Geri yerleştir<span>Yeni</span></h2>
+        <p>Yapay zekanın etiketli cevabını, temizleme sırasında indirdiğiniz eşleme tablosuyla gerçek adlara ve bilgilere geri çevirin. 'ye, 'nin gibi hâl ekleri yeni kelimeye göre düzeltilir.</p>
+      </div>
+      <div class="geri-izgara">
+        <div>
+          <label class="baslik" for="geri-metin">1. Etiketli metin</label>
+          <textarea id="geri-metin" placeholder="Örn. [KİŞİ-1]'nin talebi üzerine [KİŞİ-2]'ye ihtarname gönderilmiştir."></textarea>
+        </div>
+        <div>
+          <label class="baslik" for="geri-csv">2. Eşleme tablosu</label>
+          <div class="birak kucuk" id="geri-birak">
+            <label class="dosya-dugme"><input type="file" id="geri-csv" accept=".csv,text/csv"><span class="dugme-koyu">Tabloyu seç</span></label>
+            <span id="geri-csv-durum">suzgec_esleme_tablosu_GIZLI.csv dosyasını seçin ya da buraya bırakın</span>
+          </div>
+        </div>
+      </div>
+      <div class="satir">
+        <button class="dugme" id="geri-yap" type="button">Geri yerleştir</button>
+        <button class="dugme-ikincil" id="geri-kopyala" type="button" disabled>Kopyala</button>
+        <button class="dugme-ikincil" id="geri-indir" type="button" disabled>Metni indir (.txt)</button>
+        <button class="dugme-metin" id="geri-temizle" type="button">Temizle</button>
+      </div>
+      <p class="durum" id="geri-durum" role="status" aria-live="polite"></p>
+      <div class="geri-sonuc" id="geri-sonuc" hidden></div>
+      <p class="geri-aciklama" id="geri-aciklama" hidden><span><i style="background:var(--basari)"></i>Yerleştirildi</span><span><i style="background:var(--uyari)"></i>Hâl eki düzeltildi</span><span><i style="background:var(--kirmizi)"></i>Tabloda karşılığı yok</span></p>
+    </section>
   </div>
 </main>
 

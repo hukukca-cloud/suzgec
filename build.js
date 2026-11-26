@@ -25,6 +25,7 @@ const betikler = [
   ['Süzgeç: UDF işleyici', 'src/udf.js'],
   ['Süzgeç: PDF işleyici', 'src/pdf.js'],
   ['Süzgeç: Word üretici', 'src/word-uret.js'],
+  ['Süzgeç: geri yerleştirme', 'src/geri.js'],
   ['Süzgeç: arayüz', 'src/ui.js']
 ];
 

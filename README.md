@@ -45,6 +45,19 @@ Kurum, şirket ve üniversite adları (ör. "… Ticaret A.Ş.", "… Üniversit
 - **Karartma:** Word ve UDF belgelerinde ifadeler `█████` ile, PDF belgelerinde siyah bant ile değiştirilir. Maske uzunluğu sabittir; böylece gizlenen ifadenin uzunluğu da açığa çıkmaz.
 - **Tutarlı etiketleme:** İfadeler `[KİŞİ-1]`, `[TCKN-1]`, `[ADRES-2]` gibi etiketlerle değiştirilir. Aynı anda işlenen tüm belgelerde aynı kişi aynı etiketi alır; bu sayede belgeler arasındaki bağlantı okunabilir kalır. İsteğe bağlı olarak etiket–özgün ifade eşleme tablosu indirilebilir (bkz. aşağıdaki hukuki değerlendirme).
 
+## Geri yerleştirme (1.2.0)
+
+Tutarlı etiketleme ile temizlenen metni yapay zekaya verdikten sonra gelen cevaptaki etiketler, sayfanın altındaki **Geri yerleştir** bölümünde gerçek ifadelere geri çevrilebilir:
+
+1. Temizleme sırasında **Eşleme tablosunu da indir** seçeneğini işaretleyin (`suzgec_esleme_tablosu_GIZLI.csv`).
+2. Yapay zekanın etiketli cevabını **Geri yerleştir** bölümüne yapıştırın ve eşleme tablosunu seçin.
+3. Etiketler özgün ifadelerle değiştirilir; sonucu kopyalayabilir ya da `.txt` olarak indirebilirsiniz.
+
+- **Hâl ekleri:** `[KİŞİ-2]'ye` gibi yazımlarda ek, yerleştirilen kelimeye göre yeniden kurulur (ör. `Mehmet Demir'e`, `Ali Koç'un`, `Ali Koç'ta`). Yönelme, belirtme, ilgi, bulunma, ayrılma ve vasıta ekleri desteklenir; diğer ekler olduğu gibi bırakılır.
+- **Esnek tanıma:** Köşeli parantezsiz (`KİŞİ-1`), küçük harfli ya da Türkçe karakter kullanılmadan yazılmış (`[kisi-1]`) etiketler de tanınır.
+- **Bilinmeyen etiketler:** Tabloda karşılığı olmayan etiketler (ör. yapay zekanın kendiliğinden ürettiği `[KİŞİ-9]`) değiştirilmez, kırmızıyla işaretlenir.
+- Eşleme tablosu kişisel veri içerir. Tablo yalnızca tarayıcı penceresinin belleğinde okunur; hiçbir yere gönderilmez.
+
 ## Değişiklik takibi
 
 - **Çıktıda işaretleme (varsayılan olarak açık):** Word çıktısında değiştirilen her ifade kırmızı zemin ve çerçeveyle, UDF çıktısında kırmızı ve kalın yazıyla işaretlenir. Belge açıldığında neyin değiştirildiği doğrudan görülebilir. Word'ün “izlenen değişiklikler” özelliği bilinçli olarak kullanılmamaktadır; zira bu yöntem silinen kişisel veriyi dosyanın içinde saklamaya devam eder.
@@ -103,7 +116,7 @@ Sayfadaki IsThisLegal imzası derleme sırasında `assets/imza.json` dosyasında
 
 ```bash
 npm install          # pdf.js ve JSZip yerel olarak indirilir
-npm test             # tespit motoru testleri
+npm test             # tespit motoru ve geri yerleştirme testleri
 npm run build        # dist/suzgec.html ve SHA-256 özetini üretir
 ```
 

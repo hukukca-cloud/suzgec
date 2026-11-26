@@ -618,12 +618,72 @@
   function oturumuTemizle() {
     durum.dosyalar.forEach(function (d) { if (d.belge && d.belge.pdf) d.belge.pdf.destroy(); });
     durum.dosyalar = []; durum.tarandi = false; durum.indirildi = false; durum.tercih = {};
+    if (S.geri && $('#geri')) geriTemizle();
     $('#dosya-sec').value = ''; $('#ara').value = ''; durum.ara = '';
     bildir('Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
     ciz();
   }
 
   /* ---------- Başlangıç ---------- */
+
+
+  /* ---------- Geri yerleştir ---------- */
+
+  var geri = { harita: null, sonuc: null };
+  function geriDurum(metin, tur) { var d = $('#geri-durum'); d.textContent = metin; d.className = 'durum' + (tur ? ' ' + tur : ''); }
+  async function geriTabloOku(dosya) {
+    if (!dosya) return;
+    var G = S.geri, metin = await dosya.text(), r = G.eslemeOku(metin);
+    if (!r.sayi) { geri.harita = null; $('#geri-csv-durum').className = ''; $('#geri-csv-durum').textContent = dosya.name; geriDurum('Bu dosyada eşleme bulunamadı. Süzgeç\'in indirdiği "eşleme tablosu" dosyasını seçin.', 'hata'); return; }
+    geri.harita = r.harita;
+    var d = $('#geri-csv-durum'); d.className = 'tamam'; d.textContent = '✓ ' + dosya.name + ' · ' + r.sayi + ' etiket';
+    geriDurum('Eşleme tablosu yüklendi. Tablo kişisel veri içerir ve yalnız bu pencerede tutulur.', '');
+  }
+  function geriYap() {
+    var metin = $('#geri-metin').value;
+    if (!metin.trim()) { geriDurum('Önce etiketli metni yapıştırın.', 'uyari'); return; }
+    if (!geri.harita) { geriDurum('Önce eşleme tablosunu yükleyin.', 'uyari'); return; }
+    var r = S.geri.geriYerlestir(metin, geri.harita); geri.sonuc = r;
+    var kutu = $('#geri-sonuc');
+    kutu.innerHTML = r.parcalar.map(function (p) {
+      if (p.tur === 'metin') return esc(p.metin);
+      if (p.tur === 'yerlesti') return '<mark class="' + (p.ekDegisti ? 'y' : 'g') + '" title="' + esc(p.eski) + '">' + esc(p.metin) + '</mark>';
+      return '<mark class="r" title="Eşleme tablosunda karşılığı yok">' + esc(p.metin) + '</mark>';
+    }).join('');
+    kutu.hidden = false; $('#geri-aciklama').hidden = false;
+    $('#geri-kopyala').disabled = $('#geri-indir').disabled = false;
+    var s = r.sayac;
+    if (!s.yerlesti && !s.bilinmeyen) { geriDurum('Metinde Süzgeç etiketi bulunamadı.', 'uyari'); return; }
+    geriDurum(s.yerlesti + ' etiket yerleştirildi' + (s.ekDuzeltildi ? ', ' + s.ekDuzeltildi + ' hâl eki düzeltildi' : '') +
+      (s.bilinmeyen ? '. ' + s.bilinmeyen + ' etiketin tabloda karşılığı yok; kırmızıyla işaretlendi, elle kontrol edin.' : '. Metni göndermeden önce okuyun.'), s.bilinmeyen ? 'uyari' : 'basari');
+  }
+  function geriTemizle() {
+    geri.harita = null; geri.sonuc = null;
+    $('#geri-metin').value = ''; $('#geri-csv').value = '';
+    var d = $('#geri-csv-durum'); d.className = ''; d.textContent = 'suzgec_esleme_tablosu_GIZLI.csv dosyasını seçin ya da buraya bırakın';
+    $('#geri-sonuc').innerHTML = ''; $('#geri-sonuc').hidden = true; $('#geri-aciklama').hidden = true;
+    $('#geri-kopyala').disabled = $('#geri-indir').disabled = true; geriDurum('', '');
+  }
+  function geriBaslat() {
+    if (!S.geri || !$('#geri')) return;
+    $('#geri-csv').addEventListener('change', function (e) { var f = e.target.files[0]; e.target.value = ''; geriTabloOku(f); });
+    var alan = $('#geri-birak');
+    ['dragenter', 'dragover'].forEach(function (t) { alan.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); alan.classList.add('aktif'); }); });
+    ['dragleave', 'drop'].forEach(function (t) { alan.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); alan.classList.remove('aktif'); }); });
+    alan.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files[0]) geriTabloOku(e.dataTransfer.files[0]); });
+    $('#geri-yap').addEventListener('click', geriYap);
+    $('#geri-temizle').addEventListener('click', geriTemizle);
+    $('#geri-kopyala').addEventListener('click', function () {
+      if (!geri.sonuc) return;
+      var b = $('#geri-kopyala');
+      var bitti = function (ok) { b.textContent = ok ? 'Kopyalandı' : 'Kopyalanamadı'; setTimeout(function () { b.textContent = 'Kopyala'; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(geri.sonuc.metin).then(function () { bitti(true); }, function () { bitti(false); });
+      else bitti(false);
+    });
+    $('#geri-indir').addEventListener('click', function () {
+      if (geri.sonuc) indirBaslat(new TextEncoder().encode('\uFEFF' + geri.sonuc.metin), 'geri_yerlestirilmis_metin.txt', 'text/plain;charset=utf-8');
+    });
+  }
 
   function baslat() {
     var alan = $('#birak');
@@ -636,6 +696,7 @@
     $('#tara').addEventListener('click', tara);
     $('#indir').addEventListener('click', indir);
     $('#temizle').addEventListener('click', oturumuTemizle);
+    geriBaslat();
     $$('input[name="mod"]').forEach(function (r) { r.addEventListener('change', function () { durum.indirildi = false; ciz(); }); });
     var araZaman = null;
     $('#ara').addEventListener('input', function (e) {
