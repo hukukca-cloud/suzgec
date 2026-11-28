@@ -773,7 +773,15 @@
   // Gömülü açıldığında üst sayfaya hazır olduğunu bildir
   if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', uygulama: 'suzgec', surum: 2 }, '*'); } catch (e) {} }
   // Ortak araç sayfasının içinde açıldığında kendi üst bandını gizle
-  if (/gomulu/.test(location.hash)) document.documentElement.classList.add('gomulu');
+  if (/gomulu/.test(location.hash)) {
+    document.documentElement.classList.add('gomulu');
+    // Esc: açık pencere yoksa ortak sayfaya ana ekrana dönme isteği gönder
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !e.defaultPrevented && !document.querySelector('dialog[open]') && window.parent !== window) {
+        try { window.parent.postMessage({ tip: 'kk-esc' }, '*'); } catch (h) {}
+      }
+    });
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();

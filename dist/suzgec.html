@@ -413,7 +413,7 @@ footer strong { color: var(--beyaz); }
 <footer>
   <div class="kap">
     <div>
-      <p><strong>Süzgeç</strong> sürüm 1.2.0 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
+      <p><strong>Süzgeç</strong> sürüm 1.2.1 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
       <p>Otomatik tespit, kişisel verilerin tamamının yakalanacağını güvence altına almaz; çıktıların paylaşılmadan önce kullanıcı tarafından kontrol edilmesi gerekmektedir. Etiketleme yöntemi ve eşleme tablosunun saklanması hâlinde elde edilen sonuç, anonim hâle getirme değil takma adlandırma niteliğinde olabilir.</p>
     </div>
     <div class="imza-kutu">
@@ -2824,7 +2824,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   // Gömülü açıldığında üst sayfaya hazır olduğunu bildir
   if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', uygulama: 'suzgec', surum: 2 }, '*'); } catch (e) {} }
   // Ortak araç sayfasının içinde açıldığında kendi üst bandını gizle
-  if (/gomulu/.test(location.hash)) document.documentElement.classList.add('gomulu');
+  if (/gomulu/.test(location.hash)) {
+    document.documentElement.classList.add('gomulu');
+    // Esc: açık pencere yoksa ortak sayfaya ana ekrana dönme isteği gönder
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !e.defaultPrevented && !document.querySelector('dialog[open]') && window.parent !== window) {
+        try { window.parent.postMessage({ tip: 'kk-esc' }, '*'); } catch (h) {}
+      }
+    });
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();
