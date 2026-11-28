@@ -95,11 +95,11 @@
     }
     durum.tarandi = false; durum.indirildi = false;
     ciz();
-    if (durum.dosyalar.some(function (d) { return !d.hata; })) bildir('Dosyalar eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
+    if (durum.dosyalar.some(function (d) { return !d.hata; })) await tara();
   }
 
   var yapistirSayac = 0;
-  function metniEkle() {
+  async function metniEkle() {
     var alan = $('#yapistir-metin'), metin = alan.value;
     if (!metin.trim()) { bildir('Önce metni yapıştırın.', 'uyari'); alan.focus(); return; }
     var veri = new TextEncoder().encode(metin);
@@ -108,7 +108,7 @@
     alan.value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false');
     durum.tarandi = false; durum.indirildi = false;
     ciz();
-    bildir('Metin listeye eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
+    await tara();
   }
 
   /* ---------- Tarama ---------- */
@@ -166,7 +166,9 @@
     var hazir = durum.tarandi && durum.dosyalar.some(function (d) { return d.belge && !d.hata; });
     $('#indir').disabled = !hazir;
     $('#esleme-sat').hidden = mod() !== 'etiket';
-    $('#tara').textContent = durum.tarandi ? 'Yeniden tara' : 'Tara ve incele';
+    $('#temizle').hidden = durum.dosyalar.length === 0;
+    $('#birak').classList.toggle('kompakt', durum.dosyalar.length > 0);
+    $('#birak strong').textContent = durum.dosyalar.length ? 'Başka belge ekleyin' : 'Belgeleri buraya bırakınız';
     ozetCiz();
     adimlariCiz();
   }
@@ -285,7 +287,7 @@
     });
     ust.appendChild(anahtar);
     var toplu = el('div', { class: 'toplu' });
-    [['Tümünü temizle', true], ['Hiçbirini temizleme', false]].forEach(function (t) {
+    [['Tümünü işaretle', true], ['İşaretleri kaldır', false]].forEach(function (t) {
       var b = el('button', { class: 'dugme-metin', type: 'button' }, t[0]);
       b.onclick = function () { d.bulgular.forEach(function (x) { secimiDegistir(d, x, t[1]); }); kartYenile(d); };
       toplu.appendChild(b);
@@ -642,7 +644,7 @@
     durum.dosyalar = []; durum.tarandi = false; durum.indirildi = false; durum.tercih = {};
     if (S.geri && $('#geri')) geriTemizle();
     $('#dosya-sec').value = ''; $('#ara').value = ''; durum.ara = '';
-    bildir(typeof mesaj === 'string' ? mesaj : 'Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
+    bildir(typeof mesaj === 'string' ? mesaj : 'Yeni belgeye hazır; önceki belgeler bellekten kaldırıldı.');
     ciz();
   }
 
@@ -723,6 +725,12 @@
     $('#yapistir-vazgec').addEventListener('click', function () { $('#yapistir-metin').value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false'); });
     geriBaslat();
     $$('input[name="mod"]').forEach(function (r) { r.addEventListener('change', function () { durum.indirildi = false; ciz(); }); });
+    // Ayar değişince belgeler kendiliğinden yeniden taranır
+    var ayarZaman = null;
+    function yenidenTara() { clearTimeout(ayarZaman); ayarZaman = setTimeout(function () { if (durum.dosyalar.length) tara(); }, 450); }
+    ['#k-yapisal', '#k-kisi', '#k-adres', '#k-ozel', '#soyad-yayilimi'].forEach(function (q) { var x = $(q); if (x) x.addEventListener('change', yenidenTara); });
+    ['#ozel-liste', '#haric-liste'].forEach(function (q) { var x = $(q); if (x) x.addEventListener('input', yenidenTara); });
+    $$('a[href="#geri"]').forEach(function (a) { a.addEventListener('click', function () { $('#geri').open = true; }); });
     var araZaman = null;
     $('#ara').addEventListener('input', function (e) {
       clearTimeout(araZaman);

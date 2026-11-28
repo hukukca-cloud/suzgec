@@ -11,11 +11,11 @@ Süzgeç; dilekçe, karar, sözleşme ve benzeri belgelerde yer alan kişisel ve
 1. [`dist/suzgec.html`](dist/suzgec.html) dosyasını indiriniz.
 2. Dosyayı güncel bir tarayıcıda (Chrome, Edge, Firefox, Safari) çift tıklayarak açınız. İsterseniz bilgisayarınızın internet bağlantısını kesebilirsiniz; araç aynı şekilde çalışır.
 3. Belgeleri sürükleyip bırakınız veya **Dosya seç** düğmesini kullanınız. Dosya yerine doğrudan metin de işlenebilir: **Metni yapıştır** düğmesiyle açılan alana metni yapıştırıp **Listeye ekle** deyiniz. Düz metin (.txt) dosyaları da kabul edilir; temizlenmiş metin, kartındaki **Temiz metni kopyala** düğmesiyle panoya alınabilir veya .txt olarak indirilebilir.
-4. **Tara ve incele** düğmesiyle taramayı başlatınız. Her belge için iki görünüm sunulur:
+4. Belge eklenince tarama kendiliğinden başlar (ayarları değiştirdiğinizde de yenilenir). Her belge için iki görünüm sunulur:
    - **Belge görünümü:** Belge metni, temizlenecek ifadeler numaralandırılmış ve kırmızı ile işaretlenmiş hâlde gösterilir. **Özgün metin / Temizlenmiş hâli** anahtarıyla belgenin temizleme sonrasındaki görünümü önceden incelenebilir. Yan paneldeki **Değişiklikler** listesi her değişikliğin numarasını, paragraf veya sayfa konumunu ve yerine konacak ifadeyi gösterir; listedeki bir öğeye tıklandığında belgede ilgili yere gidilir.
    - **Bulgu listesi:** Bulgular kategori bazında, bağlamlarıyla birlikte listelenir.
 5. Yanlış tespit edilen bir ifadeye belge görünümünde tıklayarak işaretini kaldırabilir, gözden kaçan bir ifadeyi fareyle seçip **“… ifadesini temizle”** düğmesiyle tüm belgelere ekleyebilirsiniz. Özet çubuğundaki kategori düğmeleri bir kategoriyi tüm belgelerde topluca açar veya kapatır; arama kutusu bulgular arasında filtreleme sağlar.
-6. **İndirme biçimi** olarak “Özgün biçimde” ya da “Tümünü Word (.docx) olarak” seçeneğini belirleyiniz. İkinci seçenekte PDF ve UDF belgeleri de temizlenmiş metinleriyle düzenlenebilir Word dosyasına dönüştürülür; PDF'te elle karartılan alanlar da Word çıktısına yansıtılır. Dönüştürmede sayfa düzeni ve görseller aktarılmaz.
+6. Gerekirse **Ayarlar** bölümünü açıp **İndirme biçimi** olarak “Özgün biçimde” ya da “Tümünü Word (.docx) olarak” seçeneğini belirleyiniz. İkinci seçenekte PDF ve UDF belgeleri de temizlenmiş metinleriyle düzenlenebilir Word dosyasına dönüştürülür; PDF'te elle karartılan alanlar da Word çıktısına yansıtılır. Dönüştürmede sayfa düzeni ve görseller aktarılmaz.
 7. **Temizle ve indir** düğmesiyle temizlenmiş belgeleri indiriniz. Birden çok dosya üretildiğinde çıktılar tek bir ZIP arşivi olarak verilir.
 
 Özel ve hariç listeler **Listeleri kaydet** düğmesiyle bilgisayarınıza `.json` dosyası olarak kaydedilebilir ve sonraki kullanımlarda **Listeleri yükle** ile geri alınabilir. Araç, tercihleri tarayıcıda saklamaz.
@@ -83,7 +83,7 @@ Tutarlı etiketleme ile temizlenen metni yapay zekaya verdikten sonra gelen ceva
 
 - **Ağ erişimi teknik olarak kapalıdır.** Sayfa, `connect-src 'none'` dahil olmak üzere her türlü dış kaynak yüklemesini ve ağ bağlantısını engelleyen bir İçerik Güvenliği Politikası (CSP) ile yüklenir. Bu politika tarayıcı tarafından uygulanır; uygulama kodu istese dahi veri gönderemez.
 - **Dış bağımlılık yüklenmez.** Kullanılan kütüphaneler (pdf.js, JSZip) derleme sırasında HTML dosyasının içine gömülür.
-- **Kalıcı kayıt tutulmaz.** Belgeler yalnızca açık sekmenin belleğinde işlenir; tarayıcı depolaması, çerez veya önbellek kullanılmaz. **Oturumu temizle** düğmesi ya da sekmenin kapatılması tüm verileri bellekten kaldırır.
+- **Kalıcı kayıt tutulmaz.** Belgeler yalnızca açık sekmenin belleğinde işlenir; tarayıcı depolaması, çerez veya önbellek kullanılmaz. **Yeni belge** düğmesi ya da sekmenin kapatılması tüm verileri bellekten kaldırır.
 - **Denetlenebilirlik.** Kaynak kod okunabilir biçimde `src/` klasöründedir. Derleme betiği, uygulama kodunda ağ çağrısı yapabilecek ifadeler bulunması hâlinde derlemeyi durdurur.
 
 Tarayıcı geliştirici araçlarının "Ağ" (Network) sekmesi açılarak, araç kullanılırken hiçbir dış istekte bulunulmadığı bizzat gözlemlenebilir.

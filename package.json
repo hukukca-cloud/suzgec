@@ -1,6 +1,6 @@
 {
   "name": "suzgec",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "PDF, Word ve UDF belgeleri için çevrimdışı, açık kaynak kişisel veri temizleme aracı",
   "main": "build.js",
   "scripts": {

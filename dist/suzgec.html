@@ -62,13 +62,17 @@ header.ust .kap { display: flex; align-items: center; gap: 18px; padding-top: 16
 .adim.tamam i { background: var(--siyah); color: var(--beyaz); }
 @media (max-width: 640px) { .adim span { display: none; } }
 
-main .izgara { display: grid; grid-template-columns: 300px 1fr; gap: 22px; padding-bottom: 48px; align-items: start; }
-@media (max-width: 900px) { main .izgara { grid-template-columns: 1fr; } }
+main .izgara { display: block; padding-bottom: 28px; }
 
 /* ---- Ayarlar ---- */
-aside.ayarlar { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 10px; padding: 18px; box-shadow: var(--golge); position: sticky; top: 14px; max-height: calc(100vh - 28px); overflow: auto; }
-@media (max-width: 900px) { aside.ayarlar { position: static; max-height: none; } }
-aside h2 { font: 700 16px/1.3 var(--serif); margin: 0 0 14px; padding-bottom: 10px; border-bottom: 2px solid var(--siyah); }
+details.ayarlar { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 10px; margin: 0 0 16px; }
+details.ayarlar > summary { cursor: pointer; list-style: none; padding: 12px 16px; font-weight: 700; font-size: 14px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+details.ayarlar > summary::-webkit-details-marker, details.geri > summary::-webkit-details-marker { display: none; }
+details.ayarlar > summary::before, details.geri > summary h2::before { content: "▸"; display: inline-block; color: var(--gri); transition: transform .15s; margin-right: 6px; }
+details.ayarlar[open] > summary::before, details.geri[open] > summary h2::before { transform: rotate(90deg); }
+details.ayarlar > summary small { font-weight: 400; color: var(--gri); font-size: 12.5px; }
+.ayar-izgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 4px 26px; padding: 4px 18px 8px; border-top: 1px solid var(--acik-gri); }
+.ayar-izgara fieldset { margin: 12px 0 8px; }
 fieldset { border: 0; padding: 0; margin: 0 0 18px; }
 legend { font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--kirmizi); margin-bottom: 6px; padding: 0; }
 label.secim { display: flex; gap: 9px; align-items: flex-start; padding: 5px 0; cursor: pointer; font-size: 14px; }
@@ -104,6 +108,10 @@ textarea { min-height: 66px; resize: vertical; }
 label.dosya-dugme { display: inline-block; margin-top: 10px; }
 label.dosya-dugme input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 label.dosya-dugme input:focus-visible + span { outline: 2px solid var(--kirmizi); outline-offset: 2px; }
+.birak.kompakt { padding: 12px 16px; display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.birak.kompakt p, .birak.kompakt .tur-rozetleri { display: none; }
+.birak.kompakt strong { font-size: 14px; margin: 0; }
+.birak.kompakt .birak-dugmeler { margin: 0; }
 .eylemler { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 16px 0 6px; }
 .durum { min-height: 22px; font-size: 13.5px; color: var(--gri); margin: 6px 0 12px; }
 .durum.basari { color: var(--basari); } .durum.uyari { color: var(--uyari); } .durum.hata { color: var(--kirmizi); font-weight: 600; }
@@ -226,9 +234,11 @@ html.gomulu header.ust { display: none; }
 /* ---------- Geri yerleştir ---------- */
 .ust-link { color: var(--beyaz); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--kirmizi); padding-bottom: 1px; white-space: nowrap; }
 .ust-link:hover { color: #ff4d67; }
-section.geri { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 10px; box-shadow: var(--golge); padding: 20px; margin: 4px 0 36px; scroll-margin-top: 16px; }
+details.geri { background: var(--beyaz); border: 1px solid var(--acik-gri); border-radius: 10px; padding: 14px 20px; margin: 4px 0 36px; scroll-margin-top: 16px; }
+details.geri > summary { cursor: pointer; list-style: none; margin-bottom: 0; }
+details.geri[open] > summary { margin-bottom: 14px; }
 .geri-ust { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 14px; }
-.geri-ust h2 { font: 700 22px/1.2 var(--serif); margin: 0; }
+.geri-ust h2 { font: 700 17px/1.2 var(--serif); margin: 0; }
 .geri-ust h2 span { display: inline-block; background: var(--siyah); color: var(--beyaz); font: 700 11px/1 var(--sans); border-radius: 999px; padding: 4px 8px; margin-left: 8px; vertical-align: 3px; }
 .geri-ust p { margin: 0; color: var(--gri); font-size: 13.5px; flex: 1 1 380px; }
 .geri-izgara { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; }
@@ -279,12 +289,37 @@ footer strong { color: var(--beyaz); }
   <div class="kap">
     <ol class="adimlar" aria-label="İşlem adımları">
       <li class="adim aktif" id="adim-1"><i>1</i><span>Belgeleri yükleyin</span></li>
-      <li class="adim" id="adim-2"><i>2</i><span>Tarayın ve değişiklikleri inceleyin</span></li>
+      <li class="adim" id="adim-2"><i>2</i><span>İşaretlenenleri kontrol edin</span></li>
       <li class="adim" id="adim-3"><i>3</i><span>Temizleyin ve indirin</span></li>
     </ol>
     <div class="izgara">
-      <aside class="ayarlar" aria-label="Ayarlar">
-        <h2>Tarama ayarları</h2>
+
+      <section aria-label="Belgeler">
+        <div class="birak" id="birak">
+          <strong>Belgeleri buraya bırakınız</strong>
+          <div class="tur-rozetleri"><span class="rozet rozet-pdf">PDF</span><span class="rozet rozet-docx">DOCX</span><span class="rozet rozet-udf">UDF</span><span class="rozet rozet-txt">METİN</span></div>
+          <p>Birden çok dosya seçilebilir · Belgeler bu bilgisayardan dışarı çıkmaz</p>
+          <div class="birak-dugmeler">
+            <label class="dosya-dugme"><input type="file" id="dosya-sec" multiple accept=".pdf,.docx,.udf,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><span class="dugme-koyu">Dosya seç</span></label>
+            <span class="veya">ya da</span>
+            <button class="dugme-ikincil" id="yapistir-ac" type="button" aria-expanded="false" aria-controls="yapistir">Metni yapıştır</button>
+          </div>
+        </div>
+        <div class="yapistir" id="yapistir" hidden>
+          <label for="yapistir-metin">Metni buraya yapıştırın</label>
+          <textarea id="yapistir-metin" placeholder="Dilekçe, sözleşme, e-posta… Metin bu bilgisayardan dışarı çıkmaz."></textarea>
+          <div class="yapistir-alt"><button class="dugme-koyu" id="yapistir-ekle" type="button">Listeye ekle</button><button class="dugme-metin" id="yapistir-vazgec" type="button">Vazgeç</button></div>
+        </div>
+
+        <div class="eylemler">
+          <button class="dugme-koyu" id="tara" type="button" hidden>Tara</button>
+          <button class="dugme" id="indir" type="button" disabled>Temizle ve indir</button>
+          <button class="dugme-metin" id="temizle" type="button" hidden>Yeni belge</button>
+        </div>
+        <p class="durum" id="durum" role="status" aria-live="polite"></p>
+        <details class="ayarlar" id="ayarlar">
+          <summary>Ayarlar<small>Neyin temizleneceği, karartma ya da etiketleme, özel liste, indirme biçimi</small></summary>
+          <div class="ayar-izgara">
         <fieldset>
           <legend>Kapsam</legend>
           <label class="secim"><input type="checkbox" id="k-yapisal" checked><span>Yapısal veriler<small>T.C. kimlik no, VKN, IBAN, telefon, e-posta, plaka, doğum tarihi</small></span></label>
@@ -331,31 +366,8 @@ footer strong { color: var(--beyaz); }
             <option value="300">300 dpi — yüksek kalite</option>
           </select>
         </fieldset>
-      </aside>
-
-      <section aria-label="Belgeler">
-        <div class="birak" id="birak">
-          <strong>Belgeleri buraya bırakınız</strong>
-          <div class="tur-rozetleri"><span class="rozet rozet-pdf">PDF</span><span class="rozet rozet-docx">DOCX</span><span class="rozet rozet-udf">UDF</span><span class="rozet rozet-txt">METİN</span></div>
-          <p>Birden çok dosya seçilebilir · Belgeler bu bilgisayardan dışarı çıkmaz</p>
-          <div class="birak-dugmeler">
-            <label class="dosya-dugme"><input type="file" id="dosya-sec" multiple accept=".pdf,.docx,.udf,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><span class="dugme-koyu">Dosya seç</span></label>
-            <span class="veya">ya da</span>
-            <button class="dugme-ikincil" id="yapistir-ac" type="button" aria-expanded="false" aria-controls="yapistir">Metni yapıştır</button>
           </div>
-        </div>
-        <div class="yapistir" id="yapistir" hidden>
-          <label for="yapistir-metin">Metni buraya yapıştırın</label>
-          <textarea id="yapistir-metin" placeholder="Dilekçe, sözleşme, e-posta… Metin bu bilgisayardan dışarı çıkmaz."></textarea>
-          <div class="yapistir-alt"><button class="dugme-koyu" id="yapistir-ekle" type="button">Listeye ekle</button><button class="dugme-metin" id="yapistir-vazgec" type="button">Vazgeç</button></div>
-        </div>
-
-        <div class="eylemler">
-          <button class="dugme-koyu" id="tara" type="button">Tara ve incele</button>
-          <button class="dugme" id="indir" type="button" disabled>Temizle ve indir</button>
-          <button class="dugme-metin" id="temizle" type="button">Oturumu temizle</button>
-        </div>
-        <p class="durum" id="durum" role="status" aria-live="polite"></p>
+        </details>
 
         <div class="ozet" id="ozet" aria-label="Tarama özeti">
           <div class="sayi" id="ozet-sayi">0<small>temizlenecek ifade</small></div>
@@ -368,11 +380,11 @@ footer strong { color: var(--beyaz); }
       </section>
     </div>
 
-    <section class="geri" id="geri" aria-labelledby="geri-baslik">
-      <div class="geri-ust">
-        <h2 id="geri-baslik">Geri yerleştir<span>Yeni</span></h2>
+    <details class="geri" id="geri">
+      <summary class="geri-ust">
+        <h2 id="geri-baslik">Yapay zekanın cevabını geri yerleştir</h2>
         <p>Yapay zekanın etiketli cevabını, temizleme sırasında indirdiğiniz eşleme tablosuyla gerçek adlara ve bilgilere geri çevirin. 'ye, 'nin gibi hâl ekleri yeni kelimeye göre düzeltilir.</p>
-      </div>
+      </summary>
       <div class="geri-izgara">
         <div>
           <label class="baslik" for="geri-metin">1. Etiketli metin</label>
@@ -390,12 +402,12 @@ footer strong { color: var(--beyaz); }
         <button class="dugme" id="geri-yap" type="button">Geri yerleştir</button>
         <button class="dugme-ikincil" id="geri-kopyala" type="button" disabled>Kopyala</button>
         <button class="dugme-ikincil" id="geri-indir" type="button" disabled>Metni indir (.txt)</button>
-        <button class="dugme-metin" id="geri-temizle" type="button">Temizle</button>
+        <button class="dugme-metin" id="geri-temizle" type="button">Sıfırla</button>
       </div>
       <p class="durum" id="geri-durum" role="status" aria-live="polite"></p>
       <div class="geri-sonuc" id="geri-sonuc" hidden></div>
       <p class="geri-aciklama" id="geri-aciklama" hidden><span><i style="background:var(--basari)"></i>Yerleştirildi</span><span><i style="background:var(--uyari)"></i>Hâl eki düzeltildi</span><span><i style="background:var(--kirmizi)"></i>Tabloda karşılığı yok</span></p>
-    </section>
+    </details>
   </div>
 </main>
 
@@ -413,7 +425,7 @@ footer strong { color: var(--beyaz); }
 <footer>
   <div class="kap">
     <div>
-      <p><strong>Süzgeç</strong> sürüm 1.2.1 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
+      <p><strong>Süzgeç</strong> sürüm 1.3.0 · © 2026 IsThisLegal. Tüm ticari kullanım hakları IsThisLegal'e aittir; kaynak kodu açık, bireysel ve ticari olmayan kullanım ücretsizdir (PolyForm Noncommercial 1.0.0). Belgeler yalnızca bu tarayıcı penceresinin belleğinde işlenir; sayfanın güvenlik politikası (CSP) her türlü ağ bağlantısını engeller. Pencere kapatıldığında tüm veriler silinir.</p>
       <p>Otomatik tespit, kişisel verilerin tamamının yakalanacağını güvence altına almaz; çıktıların paylaşılmadan önce kullanıcı tarafından kontrol edilmesi gerekmektedir. Etiketleme yöntemi ve eşleme tablosunun saklanması hâlinde elde edilen sonuç, anonim hâle getirme değil takma adlandırma niteliğinde olabilir.</p>
     </div>
     <div class="imza-kutu">
@@ -2146,11 +2158,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     }
     durum.tarandi = false; durum.indirildi = false;
     ciz();
-    if (durum.dosyalar.some(function (d) { return !d.hata; })) bildir('Dosyalar eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
+    if (durum.dosyalar.some(function (d) { return !d.hata; })) await tara();
   }
 
   var yapistirSayac = 0;
-  function metniEkle() {
+  async function metniEkle() {
     var alan = $('#yapistir-metin'), metin = alan.value;
     if (!metin.trim()) { bildir('Önce metni yapıştırın.', 'uyari'); alan.focus(); return; }
     var veri = new TextEncoder().encode(metin);
@@ -2159,7 +2171,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     alan.value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false');
     durum.tarandi = false; durum.indirildi = false;
     ciz();
-    bildir('Metin listeye eklendi. “Tara ve incele” ile taramayı başlatabilirsiniz.');
+    await tara();
   }
 
   /* ---------- Tarama ---------- */
@@ -2217,7 +2229,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var hazir = durum.tarandi && durum.dosyalar.some(function (d) { return d.belge && !d.hata; });
     $('#indir').disabled = !hazir;
     $('#esleme-sat').hidden = mod() !== 'etiket';
-    $('#tara').textContent = durum.tarandi ? 'Yeniden tara' : 'Tara ve incele';
+    $('#temizle').hidden = durum.dosyalar.length === 0;
+    $('#birak').classList.toggle('kompakt', durum.dosyalar.length > 0);
+    $('#birak strong').textContent = durum.dosyalar.length ? 'Başka belge ekleyin' : 'Belgeleri buraya bırakınız';
     ozetCiz();
     adimlariCiz();
   }
@@ -2336,7 +2350,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     });
     ust.appendChild(anahtar);
     var toplu = el('div', { class: 'toplu' });
-    [['Tümünü temizle', true], ['Hiçbirini temizleme', false]].forEach(function (t) {
+    [['Tümünü işaretle', true], ['İşaretleri kaldır', false]].forEach(function (t) {
       var b = el('button', { class: 'dugme-metin', type: 'button' }, t[0]);
       b.onclick = function () { d.bulgular.forEach(function (x) { secimiDegistir(d, x, t[1]); }); kartYenile(d); };
       toplu.appendChild(b);
@@ -2693,7 +2707,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     durum.dosyalar = []; durum.tarandi = false; durum.indirildi = false; durum.tercih = {};
     if (S.geri && $('#geri')) geriTemizle();
     $('#dosya-sec').value = ''; $('#ara').value = ''; durum.ara = '';
-    bildir(typeof mesaj === 'string' ? mesaj : 'Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
+    bildir(typeof mesaj === 'string' ? mesaj : 'Yeni belgeye hazır; önceki belgeler bellekten kaldırıldı.');
     ciz();
   }
 
@@ -2774,6 +2788,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('#yapistir-vazgec').addEventListener('click', function () { $('#yapistir-metin').value = ''; $('#yapistir').hidden = true; $('#yapistir-ac').setAttribute('aria-expanded', 'false'); });
     geriBaslat();
     $$('input[name="mod"]').forEach(function (r) { r.addEventListener('change', function () { durum.indirildi = false; ciz(); }); });
+    // Ayar değişince belgeler kendiliğinden yeniden taranır
+    var ayarZaman = null;
+    function yenidenTara() { clearTimeout(ayarZaman); ayarZaman = setTimeout(function () { if (durum.dosyalar.length) tara(); }, 450); }
+    ['#k-yapisal', '#k-kisi', '#k-adres', '#k-ozel', '#soyad-yayilimi'].forEach(function (q) { var x = $(q); if (x) x.addEventListener('change', yenidenTara); });
+    ['#ozel-liste', '#haric-liste'].forEach(function (q) { var x = $(q); if (x) x.addEventListener('input', yenidenTara); });
+    $$('a[href="#geri"]').forEach(function (a) { a.addEventListener('click', function () { $('#geri').open = true; }); });
     var araZaman = null;
     $('#ara').addEventListener('input', function (e) {
       clearTimeout(araZaman);
