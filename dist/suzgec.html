@@ -2809,9 +2809,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   window.addEventListener('message', function (e) {
     if (window.parent === window || e.source !== window.parent) return;
     if (!e.data || e.data.tip !== 'kk-temiz-iste') return;
-    var hazir = durum.tarandi ? durum.dosyalar.filter(function (d) { return d.belge && !d.hata; }) : [];
-    window.parent.postMessage({ tip: 'kk-temiz', metin: hazir.map(temizMetin).join('\n\n'), belge: hazir.length }, '*');
+    var cevap = { tip: 'kk-temiz', metin: '', belge: 0 };
+    try {
+      var hazir = durum.tarandi ? durum.dosyalar.filter(function (d) { return d.belge && !d.hata; }) : [];
+      cevap.metin = hazir.map(temizMetin).join('\n\n');
+      cevap.belge = hazir.length;
+      cevap.taranmadi = !durum.tarandi && durum.dosyalar.length > 0;
+    } catch (hata) { cevap.hata = String(hata && hata.message || hata); }
+    window.parent.postMessage(cevap, '*');
   });
+  // Gömülü açıldığında üst sayfaya hazır olduğunu bildir
+  if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', surum: 1 }, '*'); } catch (e) {} }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();
