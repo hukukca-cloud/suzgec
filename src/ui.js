@@ -637,12 +637,12 @@
     }
   }
 
-  function oturumuTemizle() {
+  function oturumuTemizle(mesaj) {
     durum.dosyalar.forEach(function (d) { if (d.belge && d.belge.pdf) d.belge.pdf.destroy(); });
     durum.dosyalar = []; durum.tarandi = false; durum.indirildi = false; durum.tercih = {};
     if (S.geri && $('#geri')) geriTemizle();
     $('#dosya-sec').value = ''; $('#ara').value = ''; durum.ara = '';
-    bildir('Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
+    bildir(typeof mesaj === 'string' ? mesaj : 'Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
     ciz();
   }
 
@@ -758,7 +758,9 @@
   }
   window.addEventListener('message', function (e) {
     if (window.parent === window || e.source !== window.parent) return;
-    if (!e.data || e.data.tip !== 'kk-temiz-iste') return;
+    if (!e.data) return;
+    if (e.data.tip === 'kk-oturum-temizle') { try { oturumuTemizle('Temiz metin Künye Kontrol\'e aktarıldı; bu belge Süzgeç\'ten kaldırıldı.'); } catch (x) {} return; }
+    if (e.data.tip !== 'kk-temiz-iste') return;
     var cevap = { tip: 'kk-temiz', metin: '', belge: 0 };
     try {
       var hazir = durum.tarandi ? durum.dosyalar.filter(function (d) { return d.belge && !d.hata; }) : [];
@@ -769,7 +771,9 @@
     window.parent.postMessage(cevap, '*');
   });
   // Gömülü açıldığında üst sayfaya hazır olduğunu bildir
-  if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', surum: 1 }, '*'); } catch (e) {} }
+  if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', uygulama: 'suzgec', surum: 2 }, '*'); } catch (e) {} }
+  // Ortak araç sayfasının içinde açıldığında kendi üst bandını gizle
+  if (/gomulu/.test(location.hash)) document.documentElement.classList.add('gomulu');
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();

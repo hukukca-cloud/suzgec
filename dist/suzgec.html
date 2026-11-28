@@ -222,6 +222,7 @@ dialog::backdrop { background: rgba(8,8,10,.7); }
 footer { background: var(--siyah); color: #b9b9c0; font-size: 12.5px; border-top: 3px solid var(--kirmizi); }
 footer .kap { padding-top: 24px; padding-bottom: 28px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
 @media (max-width: 760px) { footer .kap { grid-template-columns: 1fr; } }
+html.gomulu header.ust { display: none; }
 /* ---------- Geri yerleştir ---------- */
 .ust-link { color: var(--beyaz); font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--kirmizi); padding-bottom: 1px; white-space: nowrap; }
 .ust-link:hover { color: #ff4d67; }
@@ -2687,12 +2688,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     }
   }
 
-  function oturumuTemizle() {
+  function oturumuTemizle(mesaj) {
     durum.dosyalar.forEach(function (d) { if (d.belge && d.belge.pdf) d.belge.pdf.destroy(); });
     durum.dosyalar = []; durum.tarandi = false; durum.indirildi = false; durum.tercih = {};
     if (S.geri && $('#geri')) geriTemizle();
     $('#dosya-sec').value = ''; $('#ara').value = ''; durum.ara = '';
-    bildir('Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
+    bildir(typeof mesaj === 'string' ? mesaj : 'Oturum temizlendi; yüklenen belgeler bellekten kaldırıldı.');
     ciz();
   }
 
@@ -2808,7 +2809,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   window.addEventListener('message', function (e) {
     if (window.parent === window || e.source !== window.parent) return;
-    if (!e.data || e.data.tip !== 'kk-temiz-iste') return;
+    if (!e.data) return;
+    if (e.data.tip === 'kk-oturum-temizle') { try { oturumuTemizle('Temiz metin Künye Kontrol\'e aktarıldı; bu belge Süzgeç\'ten kaldırıldı.'); } catch (x) {} return; }
+    if (e.data.tip !== 'kk-temiz-iste') return;
     var cevap = { tip: 'kk-temiz', metin: '', belge: 0 };
     try {
       var hazir = durum.tarandi ? durum.dosyalar.filter(function (d) { return d.belge && !d.hata; }) : [];
@@ -2819,7 +2822,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     window.parent.postMessage(cevap, '*');
   });
   // Gömülü açıldığında üst sayfaya hazır olduğunu bildir
-  if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', surum: 1 }, '*'); } catch (e) {} }
+  if (window.parent !== window) { try { window.parent.postMessage({ tip: 'kk-hazir', uygulama: 'suzgec', surum: 2 }, '*'); } catch (e) {} }
+  // Ortak araç sayfasının içinde açıldığında kendi üst bandını gizle
+  if (/gomulu/.test(location.hash)) document.documentElement.classList.add('gomulu');
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', baslat); else baslat();
   window.Suzgec.ui = { durum: durum, dosyalariEkle: dosyalariEkle, tara: tara, indir: indir };
 })();
